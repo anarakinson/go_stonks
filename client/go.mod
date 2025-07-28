@@ -1,4 +1,4 @@
-module stonks_client
+module github.com/anarakinson/go_stonks/stonks_client
 
 go 1.24.3
 

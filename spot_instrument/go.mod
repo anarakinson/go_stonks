@@ -1,4 +1,4 @@
-module spot_instrument_service
+module github.com/anarakinson/go_stonks/spot_instrument_service
 
 go 1.24.3
 

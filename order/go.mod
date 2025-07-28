@@ -1,4 +1,4 @@
-module order_service
+module github.com/anarakinson/go_stonks/order_service
 
 go 1.24.3
 
