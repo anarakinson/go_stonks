@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package spot_instrument;
+
+option go_package = "github.com/anarakinson/stonks/stonks_pb/gen/spot_instrument;spot_instrument";
+
+import "market/market.proto";
+
+// Запрос для получения списка рынков
+message ViewMarketsRequest {
+    repeated string user_roles = 1;     // Роли пользователя для проверки доступа
+}
+
+// Ответ со списком доступных рынков
+message ViewMarketsResponse {
+    repeated market.Market markets = 1;        // Массив рынков
+}
+
+// Сервис для работы с торговыми инструментами
+service SpotInstrumentService {
+    // RPC-метод для получения списка рынков
+    rpc ViewMarkets(ViewMarketsRequest) returns (ViewMarketsResponse);
+}
+

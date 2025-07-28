@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package market;
+
+option go_package = "github.com/anarakinson/stonks/stonks_pb/gen/market;market";
+
+import "google/protobuf/timestamp.proto";
+
+// Определение сообщения Market (DTO для рынка)
+message Market {
+    string id = 1;                      // Уникальный идентификатор рынка
+    string name = 2;                    // Название рынка (например, "BTC/USD")
+    bool enabled = 3;                   // Активен ли рынок для торговли
+    google.protobuf.Timestamp deleted_at = 4;  // Дата удаления (null если не удален)
+}

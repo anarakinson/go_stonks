@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  order:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "9090"
+      - "${PORT}"
+    ports:
+      - "${PORT}:50051"
+    restart: on-failure
+    command: /app/entrypoint
+    environment:
+      - SPOT_INSTRUMENT_ADDR=${SPOT_INSTRUMENT_ADDR}

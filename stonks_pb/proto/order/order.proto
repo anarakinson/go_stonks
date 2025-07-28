@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package order;
+
+option go_package = "github.com/anarakinson/stonks/stonks_pb/gen/order;order";
+
+import "market/market.proto";
+
+// Определение сообщения Order (DTO для заказа)
+message Order {
+    string id = 1;             // Уникальный ID заказа
+    string user_id = 2;        // ID пользователя-владельца
+    string market_id = 3;      // ID рынка (например, "BTC/USD")
+    string order_type = 4;     // Тип заказа: "limit", "market" и т.д.
+    double price = 5;          // Цена за единицу
+    double quantity = 6;       // Количество
+    string status = 7;         // Статус: "created", "filled", "canceled"
+}
+
+// Запрос статуса заказа
+message GetOrderStatusRequest {
+    string order_id = 1;       // ID заказа
+    string user_id = 2;        // ID пользователя (для проверки прав)
+}
+
+// Ответ со статусом заказа
+message GetOrderStatusResponse {
+    // string status = 1;           // информация о статусе заказа
+    Order order = 1;           // Полная информация о заказе
+}
+
+// Запрос на создание заказа
+message CreateOrderRequest {
+    string user_id = 1;        // ID пользователя
+    string market_id = 2;      // ID рынка
+    string order_type = 3;     // Тип заказа
+    double price = 4;          // Цена
+    double quantity = 5;       // Количество
+}
+
+// Ответ после создания заказа
+message CreateOrderResponse {
+    string order_id = 1;       // ID созданного заказа
+    string status = 2;         // Статус после создания
+}
+
+// Запрос списка доступных рынков
+message GetMarketsRequest {
+}
+
+// Ответ со списком доступных рынков
+message GetMarketsResponse {
+    repeated market.Market markets = 1; // список доступных рынков
+}
+
+// Запрос списка созданных пользователем заказов
+message GetUserOrdersRequest {
+    string user_id = 1; // идентификатор пользователя
+}
+
+// Ответ со списком доступных рынков
+message GetUserOrdersResponse {
+    repeated Order orders = 1; // список доступных рынков
+}
+
+// Сервис для работы с заказами
+service OrderService {
+    // Метод для получения статуса заказа
+    rpc GetOrderStatus(GetOrderStatusRequest) returns (GetOrderStatusResponse);
+    
+    // Метод для создания нового заказа
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+
+    // Метод для получения списка доступных рынков
+    rpc GetMarkets(GetMarketsRequest) returns (GetMarketsResponse);
+
+    // Метод для получения списка заказов пользователя 
+    rpc GetUserOrders(GetUserOrdersRequest) returns (GetUserOrdersResponse);
+}
+
+

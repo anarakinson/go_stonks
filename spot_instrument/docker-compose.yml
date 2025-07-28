@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  spot_instrument:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "9090"
+      - "${PORT}"
+    ports:
+      - "${PORT}:50052"
+    restart: on-failure
+    command: /app/entrypoint
+    volumes:
+      # в идеале этот модуль нужно запушить на гитхаб и импортировать в проект
+      - ../stonks_pb:/go/src/stonks_pb  # Для разработки
