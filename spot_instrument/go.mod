@@ -2,11 +2,6 @@ module spot_instrument_service
 
 go 1.24.3
 
-// в идеале это надо вынести в отдельный проект на гитхаб и импортировать в проект.
-require stonks_pb v1.0.0
-
-replace stonks_pb => ../stonks_pb
-
 // replace stonks_pb => /go/src/stonks_pb
 
 require (

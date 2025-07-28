@@ -2,11 +2,6 @@ module order_service
 
 go 1.24.3
 
-// в идеале это надо вынести в отдельный проект на гитхаб и импортировать в проект.
-require stonks_pb v1.0.0
-
-replace stonks_pb => ../stonks_pb
-
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect

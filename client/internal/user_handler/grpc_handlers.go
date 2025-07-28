@@ -6,7 +6,7 @@ import (
 	"stonks_client/internal/domain"
 	"time"
 
-	pb "stonks_pb/gen/order"
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 )
 
 func (h *UserHandler) CreateOrderRequest(order *domain.Order) (*pb.CreateOrderResponse, error) {

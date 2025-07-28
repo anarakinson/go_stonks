@@ -7,7 +7,8 @@ import (
 	"net"
 	spot_instrument_service "spot_instrument_service/internal/app/spot_instrument"
 	"spot_instrument_service/pkg/interceptors"
-	pb "stonks_pb/gen/spot_instrument"
+
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
 
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"

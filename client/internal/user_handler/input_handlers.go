@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	pb_market "stonks_pb/gen/market"
-	pb "stonks_pb/gen/order"
+	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 )
 
 func (h *UserHandler) GetUserID() (string, error) {

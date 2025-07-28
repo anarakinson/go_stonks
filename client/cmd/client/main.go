@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	pb "stonks_pb/gen/order"
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 )
 
 func main() {

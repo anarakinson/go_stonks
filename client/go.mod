@@ -2,11 +2,6 @@ module stonks_client
 
 go 1.24.3
 
-// в идеале это надо вынести в отдельный проект на гитхаб и импортировать в проект.
-require stonks_pb v1.0.0
-
-replace stonks_pb => ../stonks_pb
-
 require (
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1

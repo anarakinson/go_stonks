@@ -1,7 +1,7 @@
 package order_service
 
 import (
-	pb "stonks_pb/gen/order"
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	"order_service/internal/domain"
 )
 

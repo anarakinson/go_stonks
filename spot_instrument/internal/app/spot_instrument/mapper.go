@@ -3,7 +3,7 @@ package spot_instrument
 import (
 	"spot_instrument_service/internal/domain"
 	prototime "spot_instrument_service/pkg/proto_time"
-	market_pb "stonks_pb/gen/market"
+	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 )
 
 // MarketToProto преобразует доменную сущность Market в proto-структуру
