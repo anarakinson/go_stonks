@@ -2,7 +2,7 @@ package spot_instrument
 
 import (
 	"context"
-	"spot_instrument_service/internal/domain"
+	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/domain"
 	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"

@@ -1,15 +1,15 @@
-module github.com/anarakinson/go_stonks/stonks_client
+module github.com/anarakinson/go_stonks/shared
 
 go 1.24.3
 
 require (
-	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250728150615-cea59a309904
 	github.com/google/uuid v1.6.0
-	github.com/joho/godotenv v1.5.1
+	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.74.2
 )
 
 require (
+	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect

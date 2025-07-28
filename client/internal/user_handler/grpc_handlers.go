@@ -3,8 +3,9 @@ package user_handler
 import (
 	"context"
 	"log"
-	"stonks_client/internal/domain"
 	"time"
+
+	"github.com/anarakinson/go_stonks/stonks_client/internal/domain"
 
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 )

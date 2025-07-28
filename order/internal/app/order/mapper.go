@@ -2,7 +2,7 @@ package order_service
 
 import (
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
-	"order_service/internal/domain"
+	"github.com/anarakinson/go_stonks/order_service/internal/domain"
 )
 
 // OrderToProto преобразует доменную сущность Order в proto-структуру

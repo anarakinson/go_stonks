@@ -1,6 +1,6 @@
 package inmemory
 
-import "order_service/internal/domain"
+import "github.com/anarakinson/go_stonks/order_service/internal/domain"
 
 func (r *Repository) AddOrder(order *domain.Order) error {
 	if _, exists := r.orders[order.ID]; exists {

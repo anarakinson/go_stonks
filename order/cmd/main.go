@@ -6,8 +6,8 @@ import (
 
 	"log/slog"
 
-	"order_service/internal/repository/inmemory"
-	"order_service/internal/server"
+	"github.com/anarakinson/go_stonks/order_service/internal/repository/inmemory"
+	"github.com/anarakinson/go_stonks/order_service/internal/server"
 
 	"github.com/joho/godotenv"
 )

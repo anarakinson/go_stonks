@@ -4,9 +4,9 @@ import (
 	"log"
 	"log/slog"
 	"os"
-	"spot_instrument_service/internal/domain"
-	"spot_instrument_service/internal/repository/inmemory"
-	"spot_instrument_service/internal/server"
+	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/domain"
+	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/repository/inmemory"
+	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/server"
 
 	"github.com/joho/godotenv"
 )

@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"stonks_client/internal/domain"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/anarakinson/go_stonks/stonks_client/internal/domain"
 
 	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
