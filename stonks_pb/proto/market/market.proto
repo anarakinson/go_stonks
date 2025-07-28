@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package market;
 
-option go_package = "github.com/anarakinson/stonks/stonks_pb/gen/market;market";
+option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/market;market";
 
 import "google/protobuf/timestamp.proto";
 

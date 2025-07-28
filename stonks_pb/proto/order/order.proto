@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package order;
 
-option go_package = "github.com/anarakinson/stonks/stonks_pb/gen/order;order";
+option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/order;order";
 
 import "market/market.proto";
 

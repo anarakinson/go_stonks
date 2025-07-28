@@ -7,10 +7,10 @@
 package order
 
 import (
+	market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	market "stonks_pb/gen/market"
 	sync "sync"
 	unsafe "unsafe"
 )
@@ -557,7 +557,7 @@ const file_order_order_proto_rawDesc = "" +
 	"\vCreateOrder\x12\x19.order.CreateOrderRequest\x1a\x1a.order.CreateOrderResponse\x12A\n" +
 	"\n" +
 	"GetMarkets\x12\x18.order.GetMarketsRequest\x1a\x19.order.GetMarketsResponse\x12J\n" +
-	"\rGetUserOrders\x12\x1b.order.GetUserOrdersRequest\x1a\x1c.order.GetUserOrdersResponseB\x1bZ\x19stonks_pb/gen/order;orderb\x06proto3"
+	"\rGetUserOrders\x12\x1b.order.GetUserOrdersRequest\x1a\x1c.order.GetUserOrdersResponseB<Z:github.com/anarakinson/go_stonks/stonks_pb/gen/order;orderb\x06proto3"
 
 var (
 	file_order_order_proto_rawDescOnce sync.Once

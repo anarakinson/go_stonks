@@ -101,7 +101,7 @@ const file_market_market_proto_rawDesc = "" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
 	"\aenabled\x18\x03 \x01(\bR\aenabled\x129\n" +
 	"\n" +
-	"deleted_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAtB\x1dZ\x1bstonks_pb/gen/market;marketb\x06proto3"
+	"deleted_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAtB>Z<github.com/anarakinson/go_stonks/stonks_pb/gen/market;marketb\x06proto3"
 
 var (
 	file_market_market_proto_rawDescOnce sync.Once

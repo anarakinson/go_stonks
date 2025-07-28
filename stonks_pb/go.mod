@@ -1,4 +1,4 @@
-module github.com/anarakinson/stonks/stonks_pb
+module github.com/anarakinson/go_stonks/stonks_pb
 go 1.24.3
 
 require (

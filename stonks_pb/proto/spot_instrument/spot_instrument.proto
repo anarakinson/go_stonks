@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package spot_instrument;
 
-option go_package = "github.com/anarakinson/stonks/stonks_pb/gen/spot_instrument;spot_instrument";
+option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument;spot_instrument";
 
 import "market/market.proto";
 

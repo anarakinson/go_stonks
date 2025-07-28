@@ -7,10 +7,10 @@
 package spot_instrument
 
 import (
+	market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
-	market "stonks_pb/gen/market"
 	sync "sync"
 	unsafe "unsafe"
 )
@@ -123,7 +123,7 @@ const file_spot_instrument_spot_instrument_proto_rawDesc = "" +
 	"\x13ViewMarketsResponse\x12(\n" +
 	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketR\amarkets2q\n" +
 	"\x15SpotInstrumentService\x12X\n" +
-	"\vViewMarkets\x12#.spot_instrument.ViewMarketsRequest\x1a$.spot_instrument.ViewMarketsResponseB/Z-stonks_pb/gen/spot_instrument;spot_instrumentb\x06proto3"
+	"\vViewMarkets\x12#.spot_instrument.ViewMarketsRequest\x1a$.spot_instrument.ViewMarketsResponseBPZNgithub.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument;spot_instrumentb\x06proto3"
 
 var (
 	file_spot_instrument_spot_instrument_proto_rawDescOnce sync.Once
