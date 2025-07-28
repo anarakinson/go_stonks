@@ -5,8 +5,9 @@ import (
 	"log"
 	"log/slog"
 	"net"
+
+	"github.com/anarakinson/go_stonks/shared/interceptors"
 	spot_instrument_service "github.com/anarakinson/go_stonks/spot_instrument_service/internal/app/spot_instrument"
-	"github.com/anarakinson/go_stonks/spot_instrument_service/pkg/interceptors"
 
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
 

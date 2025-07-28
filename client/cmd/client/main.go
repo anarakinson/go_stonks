@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
-	"github.com/anarakinson/go_stonks/stonks_client/pkg/interceptors"
+	"github.com/anarakinson/go_stonks/shared/interceptors"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
