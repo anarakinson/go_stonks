@@ -2,7 +2,6 @@ package order_service
 
 import (
 	"context"
-	"time"
 
 	"github.com/anarakinson/go_stonks/order/internal/domain"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
@@ -34,10 +33,6 @@ func NewService(spotClient spot_inst_pb.SpotInstrumentServiceClient, repo Reposi
 // GetMarkets - получает список доступных рынков у Spot service и возвращает клиенту
 func (s *Service) GetMarkets(ctx context.Context, req *order_pb.GetMarketsRequest) (*order_pb.GetMarketsResponse, error) {
 
-	// уменьшаем таймаут контекста на четверть
-	// в таком случае, мы успеем отправить ошибку до того, как таймаут сработает на стороне клиента
-	ctx = trimContextTimeout(ctx, 0.75)
-
 	// проверяем, существует ли рынок и доступен ли
 	marketsResp, err := s.spotInstrumentClient.ViewMarkets(ctx, &spot_inst_pb.ViewMarketsRequest{})
 	if err != nil {
@@ -64,10 +59,6 @@ func (s *Service) GetOrderStatus(ctx context.Context, req *order_pb.GetOrderStat
 
 // CreateOrder - создает заказ и помещает в хранилище
 func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequest) (*order_pb.CreateOrderResponse, error) {
-
-	// уменьшаем таймаут контекста на четверть
-	// в таком случае, мы успеем отправить ошибку до того, как таймаут сработает на стороне клиента
-	ctx = trimContextTimeout(ctx, 0.75)
 
 	// проверяем, существует ли рынок и доступен ли
 	marketsResp, err := s.spotInstrumentClient.ViewMarkets(ctx, &spot_inst_pb.ViewMarketsRequest{})

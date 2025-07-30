@@ -65,8 +65,8 @@ func (s *Server) Run() error {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		// добавляем интерсепторы
 		grpc.WithChainUnaryInterceptor(
-			interceptors.XRequestIDClient(),              // x-request-id interceptor
-			interceptors.TimeoutAdjusterInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
+			interceptors.XRequestIDClient(),                    // x-request-id interceptor
+			interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
 		),
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
 			Time:    10 * time.Second,
