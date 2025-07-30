@@ -4,8 +4,8 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/anarakinson/go_stonks/order_service/internal/repository/inmemory"
-	"github.com/anarakinson/go_stonks/order_service/internal/server"
+	"github.com/anarakinson/go_stonks/order/internal/repository/inmemory"
+	"github.com/anarakinson/go_stonks/order/internal/server"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 

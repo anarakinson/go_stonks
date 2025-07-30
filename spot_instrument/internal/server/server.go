@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	spot_instrument_service "github.com/anarakinson/go_stonks/spot_instrument_service/internal/app/spot_instrument"
+	spot_instrument_service "github.com/anarakinson/go_stonks/spot_instrument/internal/app/spot_instrument"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"go.uber.org/zap"

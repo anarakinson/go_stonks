@@ -3,7 +3,7 @@ package spot_instrument
 import (
 	"context"
 
-	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/domain"
+	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
 	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 

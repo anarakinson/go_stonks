@@ -4,9 +4,9 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/domain"
-	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/repository/inmemory"
-	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/server"
+	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
+	"github.com/anarakinson/go_stonks/spot_instrument/internal/repository/inmemory"
+	"github.com/anarakinson/go_stonks/spot_instrument/internal/server"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 

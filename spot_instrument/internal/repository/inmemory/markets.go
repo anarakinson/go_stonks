@@ -1,6 +1,6 @@
 package inmemory
 
-import "github.com/anarakinson/go_stonks/spot_instrument_service/internal/domain"
+import "github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
 
 func (r *Repository) AddMarket(market *domain.Market) error {
 	if _, exists := r.markets[market.ID]; exists {

@@ -2,7 +2,7 @@ package inmemory
 
 import (
 	"errors"
-	"github.com/anarakinson/go_stonks/order_service/internal/domain"
+	"github.com/anarakinson/go_stonks/order/internal/domain"
 )
 
 var ErrOrderCollision = errors.New("order already exists")

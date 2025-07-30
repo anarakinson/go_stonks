@@ -1,8 +1,8 @@
 package spot_instrument
 
 import (
-	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/domain"
-	prototime "github.com/anarakinson/go_stonks/spot_instrument_service/pkg/proto_time"
+	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
+	prototime "github.com/anarakinson/go_stonks/spot_instrument/pkg/proto_time"
 	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 )
 
