@@ -6,12 +6,22 @@ services:
       context: .
       dockerfile: Dockerfile
     expose:
-      - "9090"
       - "${PORT}"
     ports:
-      - "${PORT}:50052"
+      - "50052:${PORT}"
     restart: on-failure
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
     command: /app/entrypoint
-    volumes:
-      # в идеале этот модуль нужно запушить на гитхаб и импортировать в проект
-      - ../stonks_pb:/go/src/stonks_pb  # Для разработки
+    networks:
+      observability-net:
+        aliases:
+          - spot_instrument
+
+networks:
+  observability-net:
+    external: true
+
+
+

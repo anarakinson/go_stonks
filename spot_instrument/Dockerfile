@@ -6,7 +6,7 @@ COPY . .
 RUN go mod tidy
 RUN go mod download
 
-# # генерация документации
+# # генерация документации 
 # RUN go install github.com/swaggo/swag/cmd/swag@latest
 # # RUN go generate ./...
 # RUN swag init -g ./cmd/app/main.go
@@ -20,6 +20,4 @@ FROM alpine:latest
 WORKDIR /app
 COPY ./config ./config
 COPY .env .env
-COPY --from=builder /entrypoint  ./
-
-EXPOSE 50052
+COPY --from=builder /entrypoint ./

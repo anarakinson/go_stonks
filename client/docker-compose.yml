@@ -6,6 +6,17 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8099:8080"
+      - "8080:8080"
     restart: on-failure
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    networks:
+      - observability-net
+
+networks:
+  observability-net:
+    external: true
+  default:
+
 

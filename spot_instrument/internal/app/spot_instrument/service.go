@@ -2,8 +2,10 @@ package spot_instrument
 
 import (
 	"context"
+
 	"github.com/anarakinson/go_stonks/spot_instrument_service/internal/domain"
 	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
 
@@ -30,6 +32,8 @@ func NewService(repo Repository) *Service {
 
 func (s *Service) ViewMarkets(ctx context.Context, req *spot_inst_pb.ViewMarketsRequest) (*spot_inst_pb.ViewMarketsResponse, error) {
 
+	logger.Log.Info("spot_instrument service - ViewMarkets request")
+
 	var availableMarkes []*market_pb.Market
 	// получаем доступные маркеты из хранилища
 	available, err := s.markets.GetAvailableMarkets()
@@ -45,5 +49,7 @@ func (s *Service) ViewMarkets(ctx context.Context, req *spot_inst_pb.ViewMarkets
 		)
 	}
 
+	// отправляем результат
+	logger.Log.Info("spot_instrument service - ViewMarkets responce")
 	return &spot_inst_pb.ViewMarketsResponse{Markets: availableMarkes}, nil
 }

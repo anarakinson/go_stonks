@@ -7,12 +7,12 @@ import (
 	"os"
 	"time"
 
-	"log/slog"
-
 	order_service "github.com/anarakinson/go_stonks/order_service/internal/app/order"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
+	"go.uber.org/zap"
 
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 
@@ -36,9 +36,9 @@ func (s *Server) Run() error {
 
 	//--------------------------------------------//
 	// слушаем порт
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", os.Getenv("PORT")))
+	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", os.Getenv("PORT")))
 	if err != nil {
-		slog.Error("Order service failed to listen", "error", err)
+		logger.Log.Error("Order service failed to listen", zap.Error(err))
 		return err
 	}
 
@@ -46,14 +46,19 @@ func (s *Server) Run() error {
 	gs := grpc.NewServer(
 		// добавляем интерцепторы
 		grpc.ChainUnaryInterceptor(
-			grpc_prometheus.UnaryServerInterceptor, // сбор данных для прометеуса
-			interceptors.XRequestIDServer(),        // добавление x-request-id
-			interceptors.UnaryPanicRecovery(),      // перехват и восстановление паники
+			grpc_prometheus.UnaryServerInterceptor,       // сбор данных для прометеуса
+			interceptors.LoggingInterceptor(logger.Log),  // логирование запросов и ошибок
+			interceptors.XRequestIDServer(),              // добавление x-request-id
+			interceptors.UnaryPanicRecoveryInterceptor(), // перехват и восстановление паники
 		),
 	)
 
 	//--------------------------------------------//
 	// создаем соединение с spot_instrument server
+	logger.Log.Info(
+		"Create connection to spot insrtument service",
+		zap.String("service address", os.Getenv("SPOT_INSTRUMENT_ADDR")),
+	)
 	spotConn, err := grpc.NewClient(
 		// fmt.Sprintf("spot_instrument:%s", os.Getenv("SPOT_INSTRUMENT_PORT")),
 		os.Getenv("SPOT_INSTRUMENT_ADDR"),
@@ -76,7 +81,11 @@ func (s *Server) Run() error {
 	// регистрируем
 	order_pb.RegisterOrderServiceServer(gs, orderService)
 
-	log.Printf("Order service started on %v", lis.Addr())
+	logger.Log.Info(
+		"Order service started",
+		zap.String("listening address", fmt.Sprintf("%v", lis.Addr())),
+	)
+
 	return gs.Serve(lis)
 
 }

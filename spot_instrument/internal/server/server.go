@@ -2,12 +2,12 @@ package server
 
 import (
 	"fmt"
-	"log"
-	"log/slog"
 	"net"
 
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	spot_instrument_service "github.com/anarakinson/go_stonks/spot_instrument_service/internal/app/spot_instrument"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
+	"go.uber.org/zap"
 
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
 
@@ -30,9 +30,9 @@ func NewServer(port string, repo spot_instrument_service.Repository) *Server {
 func (s *Server) Run() error {
 	//--------------------------------------------//
 	// слушаем порт
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", s.port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", s.port))
 	if err != nil {
-		slog.Error("SpotInstrumentService failed to listen", "error", err)
+		logger.Log.Error("Order service failed to listen", zap.Error(err))
 		return err
 	}
 
@@ -40,9 +40,10 @@ func (s *Server) Run() error {
 	gs := grpc.NewServer(
 		// добавляем интерцепторы
 		grpc.ChainUnaryInterceptor(
-			grpc_prometheus.UnaryServerInterceptor, // сбор данных для прометеуса
-			interceptors.XRequestIDServer(),        // добавление x-request-id
-			interceptors.UnaryPanicRecovery(),      // перехват и восстановление паники
+			grpc_prometheus.UnaryServerInterceptor,       // сбор данных для прометеуса
+			interceptors.LoggingInterceptor(logger.Log),  // логирование запросов и ошибок
+			interceptors.XRequestIDServer(),              // добавление x-request-id
+			interceptors.UnaryPanicRecoveryInterceptor(), // перехват и восстановление паники
 		),
 	)
 
@@ -53,6 +54,10 @@ func (s *Server) Run() error {
 	// регистрируем сервис на сервере
 	pb.RegisterSpotInstrumentServiceServer(gs, spotService)
 
-	log.Printf("SpotInstrumentService started on %v", lis.Addr())
+	logger.Log.Info(
+		"Order service started",
+		zap.String("listening address", fmt.Sprintf("%v", lis.Addr())),
+	)
+
 	return gs.Serve(lis)
 }

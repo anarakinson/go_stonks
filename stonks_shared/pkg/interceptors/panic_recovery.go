@@ -11,7 +11,7 @@ import (
 )
 
 // UnaryPanicRecovery - перехватывает паники и преобразует в gRPC ошибку
-func UnaryPanicRecovery() grpc.UnaryServerInterceptor {
+func UnaryPanicRecoveryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (_ interface{}, err error) {
 		defer func() {
 			if r := recover(); r != nil {

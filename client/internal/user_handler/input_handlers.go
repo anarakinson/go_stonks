@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -34,6 +33,7 @@ func (h *UserHandler) GetMarketID(markets []*pb_market.Market) (string, error) {
 	if len(markets) == 0 {
 		return "", ErrNoData
 	}
+
 	var result string
 	var input string
 	var err error
@@ -153,32 +153,35 @@ func (h *UserHandler) GetOrder(userID string) (*domain.Order, error) {
 	// получаем список рынков от сервиса
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+
 	markets, err := h.client.GetMarkets(ctx, &pb.GetMarketsRequest{})
 	if err != nil {
-		log.Printf("GetMarkets failed: %v", err)
+		return nil, fmt.Errorf("getMarkets failed: %v", err)
+
 	}
 
 	marketID, err := h.GetMarketID(markets.Markets)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getMarketID failed: %v", err)
+
 	}
 
 	// 2. Тип заказа
 	orderType, err := h.GetOrderType()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getOrderType failed: %v", err)
 	}
 
 	// 3. Цена
 	price, err := h.GetPrice()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getPrice failed: %v", err)
 	}
 
 	// 4. Количество
 	quantity, err := h.GetQuantity()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("getQuantity failed: %v", err)
 	}
 
 	return &domain.Order{

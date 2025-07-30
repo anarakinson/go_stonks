@@ -6,11 +6,21 @@ services:
       context: .
       dockerfile: Dockerfile
     expose:
-      - "9090"
       - "${PORT}"
     ports:
-      - "${PORT}:50051"
+      - "50051:${PORT}"
     restart: on-failure
     command: /app/entrypoint
     environment:
       - SPOT_INSTRUMENT_ADDR=${SPOT_INSTRUMENT_ADDR}
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    networks:
+      observability-net:
+        aliases:
+          - order
+
+networks:
+  observability-net:
+    external: true
+

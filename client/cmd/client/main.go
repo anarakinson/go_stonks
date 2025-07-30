@@ -1,14 +1,16 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
 	"log/slog"
 	"os"
+	"time"
 
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
@@ -22,16 +24,19 @@ func main() {
 	// загружаем переменные окружения
 	err := godotenv.Load()
 	if err != nil {
-		slog.Error("Error loading .env file: %v", err)
+		slog.Error("Error loading .env file:", "error", err)
 		return
 	}
 
 	//--------------------------------------------//
 	// создаем соединение
+	target_address := os.Getenv("TARGET_ADDR")
+	fmt.Println(target_address)
+
 	conn, err := grpc.NewClient(
-		os.Getenv("TARGET_ADDR"),
+		target_address,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),                                           // Ожидать подключения
+		grpc.WithBlock(), // Ожидать подключения
 		grpc.WithUnaryInterceptor(interceptors.XRequestIDClient()), // x-request-id interceptor
 	)
 	if err != nil {
@@ -40,6 +45,17 @@ func main() {
 	defer conn.Close()
 
 	client := pb.NewOrderServiceClient(conn)
+
+	// /////////////////////////////////////////////
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	markets, err := client.GetMarkets(ctx, &pb.GetMarketsRequest{})
+	if err != nil {
+		fmt.Printf("getMarkets failed: %v\n", err)
+
+	}
+	fmt.Println(markets)
 
 	// ----------------------------------------- //
 	// начинаем взаимодействие с сервисом
