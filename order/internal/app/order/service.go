@@ -2,11 +2,11 @@ package order_service
 
 import (
 	"context"
+	"time"
 
 	"github.com/anarakinson/go_stonks/order/internal/domain"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -34,23 +34,22 @@ func NewService(spotClient spot_inst_pb.SpotInstrumentServiceClient, repo Reposi
 // GetMarkets - получает список доступных рынков у Spot service и возвращает клиенту
 func (s *Service) GetMarkets(ctx context.Context, req *order_pb.GetMarketsRequest) (*order_pb.GetMarketsResponse, error) {
 
-	logger.Log.Info("order service - GetMarkets request")
+	// уменьшаем таймаут контекста на четверть
+	// в таком случае, мы успеем отправить ошибку до того, как таймаут сработает на стороне клиента
+	ctx = trimContextTimeout(ctx, 0.75)
 
 	// проверяем, существует ли рынок и доступен ли
 	marketsResp, err := s.spotInstrumentClient.ViewMarkets(ctx, &spot_inst_pb.ViewMarketsRequest{})
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to check markets: %v", err)
+		return nil, status.Errorf(codes.Internal, "failed to check market service: %v", err)
 	}
 
 	// возвращаем список существующих маркетов (id)
-	logger.Log.Info("order service - GetMarkets response")
 	return &order_pb.GetMarketsResponse{Markets: marketsResp.Markets}, nil
 }
 
 // GetOrderStatus - возвращает статус заказа
 func (s *Service) GetOrderStatus(ctx context.Context, req *order_pb.GetOrderStatusRequest) (*order_pb.GetOrderStatusResponse, error) {
-
-	logger.Log.Info("order service - GetOrderStatus request")
 
 	// получаем данные из хранилища
 	order, exists := s.orders.GetOrder(req.OrderId)
@@ -60,14 +59,15 @@ func (s *Service) GetOrderStatus(ctx context.Context, req *order_pb.GetOrderStat
 		return nil, status.Errorf(codes.NotFound, "order not found")
 	}
 	// возвращаем респонс
-	logger.Log.Info("order service - GetOrderStatus response")
 	return &order_pb.GetOrderStatusResponse{Order: OrderToProto(order)}, nil
 }
 
 // CreateOrder - создает заказ и помещает в хранилище
 func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequest) (*order_pb.CreateOrderResponse, error) {
 
-	logger.Log.Info("order service - CreateOrder request")
+	// уменьшаем таймаут контекста на четверть
+	// в таком случае, мы успеем отправить ошибку до того, как таймаут сработает на стороне клиента
+	ctx = trimContextTimeout(ctx, 0.75)
 
 	// проверяем, существует ли рынок и доступен ли
 	marketsResp, err := s.spotInstrumentClient.ViewMarkets(ctx, &spot_inst_pb.ViewMarketsRequest{})
@@ -95,15 +95,12 @@ func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequ
 		return nil, status.Errorf(codes.AlreadyExists, "order already exists")
 	}
 
-	logger.Log.Info("order service - CreateOrder response")
 	return &order_pb.CreateOrderResponse{Status: order.Status, OrderId: order.ID}, nil
 
 }
 
 // GetOrderStatus - возвращает статус заказа
 func (s *Service) GetUserOrders(ctx context.Context, req *order_pb.GetUserOrdersRequest) (*order_pb.GetUserOrdersResponse, error) {
-
-	logger.Log.Info("order service - GetUserOrders request")
 
 	// получаем данные из хранилища
 	orders, err := s.orders.GetUserOrders(req.UserId)
@@ -119,6 +116,5 @@ func (s *Service) GetUserOrders(ctx context.Context, req *order_pb.GetUserOrders
 	}
 
 	// возвращаем респонс
-	logger.Log.Info("order service - GetUserOrders response")
 	return &order_pb.GetUserOrdersResponse{Orders: protoOrders}, nil
 }

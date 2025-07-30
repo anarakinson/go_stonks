@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -11,10 +10,12 @@ import (
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/keepalive"
 
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 )
@@ -29,6 +30,14 @@ func main() {
 	}
 
 	//--------------------------------------------//
+	// инициализируем логгер
+	if err := logger.Init("production"); err != nil {
+		slog.Error("Unable to init zap-logger", "error", err)
+		return
+	}
+	defer logger.Sync()
+
+	//--------------------------------------------//
 	// создаем соединение
 	target_address := os.Getenv("TARGET_ADDR")
 	fmt.Println(target_address)
@@ -36,7 +45,10 @@ func main() {
 	conn, err := grpc.NewClient(
 		target_address,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(), // Ожидать подключения
+		grpc.WithKeepaliveParams(keepalive.ClientParameters{
+			Time:    10 * time.Second,
+			Timeout: 5 * time.Second,
+		}),
 		grpc.WithUnaryInterceptor(interceptors.XRequestIDClient()), // x-request-id interceptor
 	)
 	if err != nil {
@@ -45,17 +57,6 @@ func main() {
 	defer conn.Close()
 
 	client := pb.NewOrderServiceClient(conn)
-
-	// /////////////////////////////////////////////
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	markets, err := client.GetMarkets(ctx, &pb.GetMarketsRequest{})
-	if err != nil {
-		fmt.Printf("getMarkets failed: %v\n", err)
-
-	}
-	fmt.Println(markets)
 
 	// ----------------------------------------- //
 	// начинаем взаимодействие с сервисом
@@ -79,8 +80,15 @@ func main() {
 	// переходим в бесконечный цикл. получаем данные - отправляем запрос на сервис
 	for {
 
+		// получаем маркеты от внешнего сервиса
+		markets, err := uHandler.GetMarkets()
+		if err != nil {
+			fmt.Println("Error get available markets.")
+			return
+		}
+
 		// получаем от пользователя данные и создаем на их основе структуру заказа
-		order, err := uHandler.GetOrder(userID)
+		order, err := uHandler.GetOrder(userID, markets)
 		if err != nil {
 			if errors.Is(err, user_handler.ErrFinish) {
 				fmt.Println("End")
@@ -95,7 +103,8 @@ func main() {
 		// создаем заказ на основе введенных данных
 		resp, err := uHandler.CreateOrderRequest(order)
 		if err != nil {
-			log.Printf("CreateOrder failed: %v", err)
+			fmt.Println("Error creating order. Try again")
+			continue
 		} else {
 			fmt.Printf("Order created: %v", resp)
 		}
@@ -105,7 +114,7 @@ func main() {
 		fmt.Println("\n***\n")
 		respOrders, err := uHandler.GetUserOrders(order.UserID)
 		if err != nil {
-			log.Printf("GetUserOrders failed: %v", err)
+			fmt.Println("Error getting user orders")
 			continue
 		}
 		for _, o := range respOrders.Orders {

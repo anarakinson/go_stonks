@@ -1,17 +1,14 @@
 package user_handler
 
 import (
-	"context"
 	"fmt"
 	"io"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/domain"
 
 	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
-	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 )
 
 func (h *UserHandler) GetUserID() (string, error) {
@@ -147,20 +144,10 @@ func (h *UserHandler) GetQuantity() (float64, error) {
 
 }
 
-func (h *UserHandler) GetOrder(userID string) (*domain.Order, error) {
+func (h *UserHandler) GetOrder(userID string, markets []*pb_market.Market) (*domain.Order, error) {
 
 	// 1. Выбор рынка
-	// получаем список рынков от сервиса
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	markets, err := h.client.GetMarkets(ctx, &pb.GetMarketsRequest{})
-	if err != nil {
-		return nil, fmt.Errorf("getMarkets failed: %v", err)
-
-	}
-
-	marketID, err := h.GetMarketID(markets.Markets)
+	marketID, err := h.GetMarketID(markets)
 	if err != nil {
 		return nil, fmt.Errorf("getMarketID failed: %v", err)
 

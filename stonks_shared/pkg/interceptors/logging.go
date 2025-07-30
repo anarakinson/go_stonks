@@ -16,6 +16,7 @@ func UnaryLoggingInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 		info *grpc.UnaryServerInfo,
 		handler grpc.UnaryHandler,
 	) (resp interface{}, err error) {
+
 		// Засекаем время выполнения
 		startTime := time.Now()
 
@@ -51,5 +52,6 @@ func UnaryLoggingInterceptor(logger *zap.Logger) grpc.UnaryServerInterceptor {
 		}
 
 		return resp, err
+
 	}
 }

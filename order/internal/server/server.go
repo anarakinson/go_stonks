@@ -18,6 +18,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/keepalive"
 )
 
 type Server struct {
@@ -60,13 +61,17 @@ func (s *Server) Run() error {
 		zap.String("service address", os.Getenv("SPOT_INSTRUMENT_ADDR")),
 	)
 	spotConn, err := grpc.NewClient(
-		// fmt.Sprintf("spot_instrument:%s", os.Getenv("SPOT_INSTRUMENT_PORT")),
 		os.Getenv("SPOT_INSTRUMENT_ADDR"),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithBlock(),
-		grpc.WithTimeout(5*time.Second),
-		grpc.WithUnaryInterceptor(interceptors.XRequestIDClient()), // x-request-id interceptor
-
+		// добавляем интерсепторы
+		grpc.WithChainUnaryInterceptor(
+			interceptors.XRequestIDClient(),              // x-request-id interceptor
+			interceptors.TimeoutAdjusterInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
+		),
+		grpc.WithKeepaliveParams(keepalive.ClientParameters{
+			Time:    10 * time.Second,
+			Timeout: 5 * time.Second,
+		}),
 	)
 	if err != nil {
 		log.Fatalf("Order service connection failed: %v", err)
