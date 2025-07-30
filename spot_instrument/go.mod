@@ -20,6 +20,8 @@ require (
 )
 
 require (
+	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250730120347-24674f58123b
+	github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250730120115-4cdf0243eda0
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/joho/godotenv v1.5.1
