@@ -1,4 +1,4 @@
-module github.com/anarakinson/go_stonks/stonks_shared
+module github.com/anarakinson/go_stonks/stonks_shared/v1
 
 go 1.24.3
 
