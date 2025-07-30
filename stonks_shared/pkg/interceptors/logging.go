@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func LoggingInterceptor(logger zap.Logger) grpc.UnaryServerInterceptor {
+func UnaryLoggingInterceptor(logger zap.Logger) grpc.UnaryServerInterceptor {
 	return func(
 		ctx context.Context,
 		req interface{},

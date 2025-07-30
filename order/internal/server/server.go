@@ -46,10 +46,10 @@ func (s *Server) Run() error {
 	gs := grpc.NewServer(
 		// добавляем интерцепторы
 		grpc.ChainUnaryInterceptor(
-			grpc_prometheus.UnaryServerInterceptor,       // сбор данных для прометеуса
-			interceptors.LoggingInterceptor(logger.Log),  // логирование запросов и ошибок
-			interceptors.XRequestIDServer(),              // добавление x-request-id
-			interceptors.UnaryPanicRecoveryInterceptor(), // перехват и восстановление паники
+			grpc_prometheus.UnaryServerInterceptor,           // сбор данных для прометеуса
+			interceptors.UnaryLoggingInterceptor(logger.Log), // логирование запросов и ошибок
+			interceptors.XRequestIDServer(),                  // добавление x-request-id
+			interceptors.UnaryPanicRecoveryInterceptor(),     // перехват и восстановление паники
 		),
 	)
 
