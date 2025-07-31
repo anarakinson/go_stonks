@@ -1,0 +1,55 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 15s
+    scrape_timeout: 15s
+    static_configs:
+      - targets: ['host.docker.internal:9090']
+    # Принудительно задаем метки
+    metrics_path: /metrics
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - target_label: service
+        replacement: "prometheus"
+
+
+  - job_name: 'order'
+    scrape_interval: 15s
+    scrape_timeout: 15s
+    static_configs:
+      - targets: ['order:9090']
+    metrics_path: /metrics
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - target_label: service
+        replacement: "order"
+
+
+  - job_name: 'spot_instrument'
+    scrape_interval: 15s
+    scrape_timeout: 15s
+    static_configs:
+      - targets: ['spot_instrument:9090']
+    metrics_path: /metrics
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - target_label: service
+        replacement: "spot_instrument"
+
+
+rule_files:
+  - 'alerts.yml'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+
+

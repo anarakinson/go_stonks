@@ -1,0 +1,112 @@
+groups:
+- name: runtime-alerts
+  rules:
+
+  # Горутины
+  # Слишком большое количество горутин
+  - alert: TooManyGoroutines
+    expr: goroutines_total > 5000
+    for: 5m
+    labels:
+      severity: warning
+      service: "app"
+    annotations:
+      summary: "Too many goroutines"
+      description: "Application has too many goroutines running for more than 5 minutes."
+
+  # Резкий рост горутин
+  - alert: GoroutinesSpike
+    expr: |
+      (go_goroutines{job="app"} - go_goroutines{job="app"} offset 1m) > 50
+    # rate(goroutines_total[5m]) > 50
+    for: 2m
+    labels:
+      severity: critical
+      service: "app"
+    annotations:
+      summary: "Rapid goroutines growth"
+      description: "Goroutines count is growing too fast."
+
+  # Память
+  # Высокое использование heap-памяти
+  - alert: HighHeapMemoryUsage
+    expr: memory_usage_bytes{type="heap"} > 2 * 1024 * 1024 * 1024  # 2GB
+    for: 10m
+    labels:
+      severity: warning
+      service: "app"
+    annotations:
+      summary: "High heap memory usage (over 2GB)"
+      description: "Heap memory usage is critically high."
+
+  # Утечка памяти (постоянный рост)
+  - alert: MemoryLeakDetected
+    expr: rate(memory_usage_bytes{type="heap"}[1h]) > 1024 * 1024  # 1MB/s growth
+    for: 30m
+    labels:
+      severity: critical
+      service: "app"
+    annotations:
+      summary: "Possible memory leak (growth over 1MB/s)"
+      description: "Memory shows consistent growth over 30 minutes."
+
+  # Сборка мусора
+  # Слишком частый GC (давление на CPU)
+  - alert: HighGCRate
+    expr: rate(gc_runs_total[5m]) > 10
+    for: 5m
+    labels:
+      severity: warning
+      service: "app"
+    annotations:
+      summary: "High GC frequency (over 10 runs/s)"
+      description: "Garbage collection is running too frequently."
+
+  # Внезапная остановка GC
+  - alert: GCStalled
+    expr: rate(gc_runs_total[15m]) == 0
+    for: 15m
+    labels:
+      severity: critical
+      service: "app"
+    annotations:
+      summary: "No GC runs detected"
+      description: "Garbage collector hasn't run for 15 minutes."
+
+  # Высокое использование памяти + частый GC
+  - alert: MemoryPressure
+    expr: |
+      memory_usage_bytes{type="heap"} > 1.5 * 1024 * 1024 * 1024
+      AND
+      rate(gc_runs_total[5m]) > 5
+    for: 10m
+    labels:
+      severity: critical
+      service: "app"
+    annotations:
+      summary: "Memory pressure detected"
+      description: "High heap usage with frequent GC."
+
+  # Старт и остановка приложения
+  # Приложение выключилось (упало)
+  - alert: ApplicationDown
+    expr: up{job="app"} == 0
+    for: 1m  # Длительность состояния перед срабатыванием
+    labels:
+      severity: critical
+    annotations:
+      summary: "Application is down!"
+      description: "The application has not sent metrics for more than 1 minute. The service may have crashed or been disabled."
+
+  # # Приложение запустилось
+  # - alert: ApplicationStarted
+  #   expr: |
+  #     up{job="app"} == 1
+  #   for: 1m  # Срабатывает сразу
+  #   labels:
+  #     severity: info
+  #     notification: startup
+  #   annotations:
+  #     summary: "Приложение успешно запущено"
+  #     description: |
+  #       Приложение начало отправлять метрики в Prometheus.

@@ -1,5 +1,6 @@
 version: '3.8'
 
+
 services:
   # Jaeger для трассировки
   jaeger:
@@ -11,6 +12,7 @@ services:
     networks:
       - observability-net
 
+
   # Prometheus + Grafana
   prometheus:
     image: prom/prometheus:latest
@@ -20,6 +22,25 @@ services:
       - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - observability-net
+
+
+  alertmanager:
+    image: prom/alertmanager:v0.28.0
+    restart: unless-stopped
+    # копируем шаблон
+    volumes:
+      - ./configs/prometheus/alertmanager.template.yml:/etc/alertmanager/template.yml
+      - ./scripts/alertmanager.sh:/alertmanager.sh
+    ports:
+      - "9093:9093"
+    environment:
+      - SMTP_USER=${SMTP_USER_MAIN}  # от кого слать уведомления
+      - SMTP_RECEIVER=${SMTP_USER_MAIN} # кому слать уведомления
+      - SMTP_PASSWORD=${SMTP_PASSWORD_LOYALTY_HUB} # пароль
+    # делаем подстановку переменных окружения в шаблон конфига 
+    entrypoint: /alertmanager.sh
+    command: /bin/alertmanager --config.file=/etc/alertmanager/alertmanager.yml
+
 
   grafana:
     image: grafana/grafana:latest
@@ -31,6 +52,7 @@ services:
       - observability-net
     depends_on:
       - prometheus
+
 
 networks:
   observability-net:

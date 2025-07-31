@@ -10,6 +10,7 @@ import (
 	"github.com/anarakinson/go_stonks/order/internal/server"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracing"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/metrics"
 	"go.uber.org/zap"
 
 	"github.com/joho/godotenv"
@@ -32,6 +33,14 @@ func main() {
 		return
 	}
 	defer logger.Sync()
+
+	//--------------------------------------------//
+	// создаем и запускаем сервер сборки метрик
+	go func() {
+		if err := metrics.RunMetricsServer(); err != nil {
+			logger.Log.Error("Metrics server error:", zap.Error(err))
+		}
+	}()
 
 	//--------------------------------------------//
 	// инициализация трейсинга jaegar
