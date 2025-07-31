@@ -4,7 +4,6 @@ go 1.24.3
 
 require (
 	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250728150615-cea59a309904
-	github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731085352-e78caac6ab64
 	github.com/joho/godotenv v1.5.1
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0
 	go.uber.org/zap v1.27.0
@@ -12,6 +11,7 @@ require (
 )
 
 require (
+	github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731093329-706f52f66ad4 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"log"
 	"log/slog"
 	"os"
 
@@ -8,6 +10,7 @@ import (
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/repository/inmemory"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/server"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracing"
 	"go.uber.org/zap"
 
 	"github.com/joho/godotenv"

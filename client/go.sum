@@ -2,6 +2,8 @@ github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250728150615-cea59a309904 h1
 github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250728150615-cea59a309904/go.mod h1:bXDlEjJtaX601tuitDCmxeMA5c/RDbxL0IqxYO+RVrA=
 github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731085352-e78caac6ab64 h1:fI8/EI0YfEW1DSJQuXvglTnZommAJS6fblCqY+vT3YU=
 github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731085352-e78caac6ab64/go.mod h1:BzNHENZNdBO8FQUVmvAfxmzi4NRcvsuyzWatRB7eiGo=
+github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731093329-706f52f66ad4 h1:Eaj+a5R8z6O8zVYvgZM5iCyg+CIFhb3fwh2UqAhaIco=
+github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731093329-706f52f66ad4/go.mod h1:it0wM/Fim5MW9fmH2NvHYUVfb/B3D3fEIKXaKf8+ylM=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
@@ -19,6 +21,7 @@ github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
 github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/stretchr/objx v0.5.0 h1:1zr/of2m5FGMsad5YfcqgdqdWrIhu+EBEJRhR1U7z/c=
 github.com/stretchr/objx v0.5.2 h1:xuMeJ0Sdp5ZMRXx/aWO6RZxdr3beISkG5/G/aIRr3pY=
 github.com/stretchr/objx v0.5.2/go.mod h1:FRsXN1f5AsAjCGJKqEizvkpNtU+EGNCLh3NxZ/8L+MA=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
