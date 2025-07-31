@@ -16,6 +16,7 @@ import (
 
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/backoff"
 	"google.golang.org/grpc/credentials/insecure"
@@ -46,13 +47,14 @@ func (s *Server) Run() error {
 
 	// создаем сервер GRPC
 	gs := grpc.NewServer(
+		// OpenTelemetry трассировщик
+		grpc.StatsHandler(otelgrpc.NewServerHandler()),
 		// добавляем интерцепторы
 		grpc.ChainUnaryInterceptor(
 			grpc_prometheus.UnaryServerInterceptor,           // сбор данных для прометеуса
 			interceptors.UnaryLoggingInterceptor(logger.Log), // логирование запросов и ошибок
 			interceptors.XRequestIDServer(),                  // добавление x-request-id
 			interceptors.UnaryPanicRecoveryInterceptor(),     // перехват и восстановление паники
-			otelgrpc.UnaryServerInterceptor(),                // OpenTelemetry интерцептор
 
 		),
 	)
@@ -67,12 +69,12 @@ func (s *Server) Run() error {
 		os.Getenv("SPOT_INSTRUMENT_ADDR"),
 		//
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		// OpenTelemetry трассировщик
+		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
 		// добавляем интерсепторы
 		grpc.WithChainUnaryInterceptor(
 			interceptors.XRequestIDClient(),                    // x-request-id interceptor
 			interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
-			otelgrpc.UnaryClientInterceptor(),                  // OpenTelemetry интерсептор
-			interceptors.TracingInterceptor,                    // трейсинговый интерцептор jaegar
 		),
 		// поддержка соединения
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{

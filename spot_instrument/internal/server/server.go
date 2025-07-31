@@ -12,6 +12,7 @@ import (
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
 
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 )
 
@@ -38,13 +39,14 @@ func (s *Server) Run() error {
 
 	// создаем сервер GRPC
 	gs := grpc.NewServer(
+		// OpenTelemetry трассировщик
+		grpc.StatsHandler(otelgrpc.NewServerHandler()),
 		// добавляем интерцепторы
 		grpc.ChainUnaryInterceptor(
 			grpc_prometheus.UnaryServerInterceptor,           // сбор данных для прометеуса
 			interceptors.UnaryLoggingInterceptor(logger.Log), // логирование запросов и ошибок
 			interceptors.XRequestIDServer(),                  // добавление x-request-id
 			interceptors.UnaryPanicRecoveryInterceptor(),     // перехват и восстановление паники
-			otelgrpc.UnaryServerInterceptor(),                // OpenTelemetry интерцептор
 		),
 	)
 

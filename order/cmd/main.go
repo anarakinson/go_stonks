@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"log"
 	"log/slog"
 	"os"
 
@@ -32,8 +34,15 @@ func main() {
 
 	//--------------------------------------------//
 	// инициализация трейсинга jaegar
-	shutdown := tracer.initTracing("client-service")
-	defer shutdown() // закрытие при завершении
+	tp, err := tracing.InitTracerProvider("order-service")
+	if err != nil {
+		log.Fatalf("Failed to init tracer: %v", err)
+	}
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			log.Printf("Failed to shutdown tracer: %v", err)
+		}
+	}()
 
 	//--------------------------------------------//
 	// создаем хранилище
