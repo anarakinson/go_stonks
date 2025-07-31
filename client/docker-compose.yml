@@ -7,12 +7,15 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    restart: on-failure
+    restart: unless-stopped
     environment:
       - JAEGER_AGENT_HOST=jaeger
       - JAEGER_AGENT_PORT=6831
-    # networks:
-    #   - observability-net
+    stdin_open: true      # Аналог -i
+    tty: true             # Аналог -t (без этого не будет интерактивности)
+    command: /app/entrypoint
+    networks:
+      - observability-net
 
 networks:
   observability-net:

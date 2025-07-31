@@ -8,8 +8,10 @@ import (
 	"time"
 
 	order_service "github.com/anarakinson/go_stonks/order/internal/app/order"
+	// "github.com/anarakinson/go_stonks/order/pkg/interceptors"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
+
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"go.uber.org/zap"
@@ -71,7 +73,7 @@ func (s *Server) Run() error {
 		// OpenTelemetry трассировщик
 		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
 		// добавляем интерсепторы
-		grpc.WithChainUnaryInterceptor(
+		grpc.WithUnaryInterceptor(
 			interceptors.XRequestIDClient(), // x-request-id interceptor
 			// interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
 		),

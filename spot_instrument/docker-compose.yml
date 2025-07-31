@@ -9,13 +9,13 @@ services:
       - "${PORT}"
     ports:
       - "50052:${PORT}"
-    restart: on-failure
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "grpc_health_probe -addr=:${PORT}"]
       interval: 5s
     command: /app/entrypoint
     environment:
-      - JAEGER_AGENT_HOST=${JAEGER_AGENT_HOST}
+      - JAEGER_AGENT_HOST=jaeger
       - JAEGER_AGENT_PORT=6831
     networks:
       observability-net:

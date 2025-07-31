@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
+
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracing"
@@ -43,7 +44,7 @@ func main() {
 
 	//--------------------------------------------//
 	// инициализация трейсинга jaegar
-	tp, err := tracing.InitTracerProvider("order-service")
+	tp, err := tracing.InitTracerProvider("client-service")
 	if err != nil {
 		log.Fatalf("Failed to init tracer: %v", err)
 	}

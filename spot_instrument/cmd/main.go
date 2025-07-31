@@ -36,7 +36,7 @@ func main() {
 
 	//--------------------------------------------//
 	// инициализация трейсинга jaegar
-	tp, err := tracing.InitTracerProvider("order-service")
+	tp, err := tracing.InitTracerProvider("spot_instrument-service")
 	if err != nil {
 		log.Fatalf("Failed to init tracer: %v", err)
 	}
