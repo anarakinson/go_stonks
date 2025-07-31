@@ -11,8 +11,8 @@ services:
     environment:
       - JAEGER_AGENT_HOST=jaeger
       - JAEGER_AGENT_PORT=6831
-    networks:
-      - observability-net
+    # networks:
+    #   - observability-net
 
 networks:
   observability-net:

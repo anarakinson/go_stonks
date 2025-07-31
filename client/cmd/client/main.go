@@ -80,8 +80,6 @@ func main() {
 		grpc.WithChainUnaryInterceptor(
 			interceptors.XRequestIDClient(), // x-request-id interceptor
 		),
-		// стриминговый интерсептор для трассировки
-		grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()),
 	)
 	if err != nil {
 		log.Fatalf("Connection failed: %v", err)

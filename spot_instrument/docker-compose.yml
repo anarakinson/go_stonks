@@ -15,7 +15,7 @@ services:
       interval: 5s
     command: /app/entrypoint
     environment:
-      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_HOST=${JAEGER_AGENT_HOST}
       - JAEGER_AGENT_PORT=6831
     networks:
       observability-net:

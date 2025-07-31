@@ -16,7 +16,7 @@ services:
     command: /app/entrypoint
     environment:
       - SPOT_INSTRUMENT_ADDR=${SPOT_INSTRUMENT_ADDR}
-      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_HOST=${JAEGER_AGENT_HOST}
       - JAEGER_AGENT_PORT=6831
     networks:
       observability-net:

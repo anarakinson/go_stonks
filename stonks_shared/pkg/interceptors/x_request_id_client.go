@@ -20,13 +20,19 @@ func XRequestIDClient() grpc.UnaryClientInterceptor {
 		// Проверяем, есть ли уже X-Request-ID
 		requestIDs := md.Get("x-request-id")
 		if len(requestIDs) == 0 {
-			// Генерируем новый UUID
-			requestID := uuid.New().String()
-			md.Set("x-request-id", requestID)
+			// Пытаемся получить из входящего контекста
+			if incomingID, ok := ctx.Value(requestIDKey).(string); ok {
+				md.Set("x-request-id", incomingID)
+			} else {
+
+				// Генерируем новый UUID
+				requestID := uuid.New().String()
+				md.Set("x-request-id", requestID)
+			}
 		}
 
 		// Создаем новый контекст с обновленными метаданными
-		newCtx := metadata.NewOutgoingContext(ctx, md)
+		newCtx := metadata.NewOutgoingContext(ctx, md.Copy())
 
 		// Продолжаем выполнение запроса с новым контекстом
 		return invoker(newCtx, method, req, reply, cc, opts...)

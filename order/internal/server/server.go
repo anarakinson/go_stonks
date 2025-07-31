@@ -55,7 +55,6 @@ func (s *Server) Run() error {
 			interceptors.UnaryLoggingInterceptor(logger.Log), // логирование запросов и ошибок
 			interceptors.XRequestIDServer(),                  // добавление x-request-id
 			interceptors.UnaryPanicRecoveryInterceptor(),     // перехват и восстановление паники
-
 		),
 	)
 
@@ -73,8 +72,8 @@ func (s *Server) Run() error {
 		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
 		// добавляем интерсепторы
 		grpc.WithChainUnaryInterceptor(
-			interceptors.XRequestIDClient(),                    // x-request-id interceptor
-			interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
+			interceptors.XRequestIDClient(), // x-request-id interceptor
+			// interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
 		),
 		// поддержка соединения
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{

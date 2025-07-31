@@ -32,8 +32,9 @@ func XRequestIDServer() grpc.UnaryServerInterceptor {
 			requestID = requestIDs[0]
 		}
 
-		// Добавляем request id в контекст
-		ctx = context.WithValue(ctx, requestIDKey, requestID)
+		// Добавляем request id в контекст, сохраняя оригинальные значения
+		ctx = metadata.AppendToOutgoingContext(ctx, "x-request-id", requestID) // Для downstream-сервисов
+		ctx = context.WithValue(ctx, requestIDKey, requestID)                  // Для текущего сервиса
 
 		// Продолжаем обработку запроса
 		return handler(ctx, req)
