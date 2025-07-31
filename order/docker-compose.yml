@@ -10,6 +10,9 @@ services:
     ports:
       - "50051:${PORT}"
     restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "grpc_health_probe -addr=:${PORT}"]
+      interval: 5s
     command: /app/entrypoint
     environment:
       - SPOT_INSTRUMENT_ADDR=${SPOT_INSTRUMENT_ADDR}

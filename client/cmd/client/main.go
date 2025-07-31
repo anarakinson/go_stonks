@@ -10,10 +10,12 @@ import (
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracer"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/backoff"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
 
@@ -38,18 +40,37 @@ func main() {
 	defer logger.Sync()
 
 	//--------------------------------------------//
+	// инициализация трейсинга jaegar
+	shutdown := tracer.initTracing("client-service")
+	defer shutdown() // закрытие при завершении
+
+	//--------------------------------------------//
 	// создаем соединение
 	target_address := os.Getenv("TARGET_ADDR")
 	fmt.Println(target_address)
 
 	conn, err := grpc.NewClient(
 		target_address,
+		// настройки соединения (без шифрования)
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		// поддержка соединения
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
-			Time:    10 * time.Second,
-			Timeout: 5 * time.Second,
+			Time:    10 * time.Second, // проверка соединения каждые 10с
+			Timeout: 5 * time.Second,  // разрыв при зависании на 5с
 		}),
-		grpc.WithUnaryInterceptor(interceptors.XRequestIDClient()), // x-request-id interceptor
+		// балансировщик нагрузки
+		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
+		// Параметры подключения
+		grpc.WithConnectParams(grpc.ConnectParams{
+			MinConnectTimeout: 5 * time.Second,       // минимальное время попытки подключения
+			Backoff:           backoff.DefaultConfig, // экспоненциальная задержка между попытками
+		}),
+		// добавляем интерсепторы
+		grpc.WithChainUnaryInterceptor(
+			interceptors.XRequestIDClient(),   // x-request-id interceptor
+			otelgrpc.UnaryClientInterceptor(), // OpenTelemetry интерсептор
+			interceptors.TracingInterceptor,   // трейсинговый интерцептор jaegar
+		),
 	)
 	if err != nil {
 		log.Fatalf("Connection failed: %v", err)

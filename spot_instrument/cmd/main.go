@@ -32,6 +32,11 @@ func main() {
 	defer logger.Sync()
 
 	//--------------------------------------------//
+	// инициализация трейсинга jaegar
+	shutdown := tracer.initTracing("client-service")
+	defer shutdown() // закрытие при завершении
+
+	//--------------------------------------------//
 	// создаем хранилище с моками рынков
 	repo := inmemory.NewRepository()
 	repo.AddMarket(domain.NewMarket("BTC-USDT", true))

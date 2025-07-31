@@ -10,13 +10,14 @@ import (
 	order_service "github.com/anarakinson/go_stonks/order/internal/app/order"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors/v1"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/backoff"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
 )
@@ -51,6 +52,8 @@ func (s *Server) Run() error {
 			interceptors.UnaryLoggingInterceptor(logger.Log), // логирование запросов и ошибок
 			interceptors.XRequestIDServer(),                  // добавление x-request-id
 			interceptors.UnaryPanicRecoveryInterceptor(),     // перехват и восстановление паники
+			otelgrpc.UnaryServerInterceptor(),                // OpenTelemetry интерцептор
+
 		),
 	)
 
@@ -62,15 +65,26 @@ func (s *Server) Run() error {
 	)
 	spotConn, err := grpc.NewClient(
 		os.Getenv("SPOT_INSTRUMENT_ADDR"),
+		//
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		// добавляем интерсепторы
 		grpc.WithChainUnaryInterceptor(
 			interceptors.XRequestIDClient(),                    // x-request-id interceptor
 			interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
+			otelgrpc.UnaryClientInterceptor(),                  // OpenTelemetry интерсептор
+			interceptors.TracingInterceptor,                    // трейсинговый интерцептор jaegar
 		),
+		// поддержка соединения
 		grpc.WithKeepaliveParams(keepalive.ClientParameters{
 			Time:    10 * time.Second,
 			Timeout: 5 * time.Second,
+		}),
+		// балансировщик нагрузки
+		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
+		// Параметры подключения
+		grpc.WithConnectParams(grpc.ConnectParams{
+			MinConnectTimeout: 5 * time.Second,
+			Backoff:           backoff.DefaultConfig,
 		}),
 	)
 	if err != nil {

@@ -5,7 +5,7 @@ import (
 	"net"
 
 	spot_instrument_service "github.com/anarakinson/go_stonks/spot_instrument/internal/app/spot_instrument"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors/v1"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 
@@ -44,6 +44,7 @@ func (s *Server) Run() error {
 			interceptors.UnaryLoggingInterceptor(logger.Log), // логирование запросов и ошибок
 			interceptors.XRequestIDServer(),                  // добавление x-request-id
 			interceptors.UnaryPanicRecoveryInterceptor(),     // перехват и восстановление паники
+			otelgrpc.UnaryServerInterceptor(),                // OpenTelemetry интерцептор
 		),
 	)
 

@@ -31,6 +31,11 @@ func main() {
 	defer logger.Sync()
 
 	//--------------------------------------------//
+	// инициализация трейсинга jaegar
+	shutdown := tracer.initTracing("client-service")
+	defer shutdown() // закрытие при завершении
+
+	//--------------------------------------------//
 	// создаем хранилище
 	repo := inmemory.NewRepository()
 

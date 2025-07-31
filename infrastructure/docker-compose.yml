@@ -36,6 +36,7 @@ networks:
   observability-net:
     driver: bridge
     name: observability-net
+
     
 volumes:
   grafana-data:
