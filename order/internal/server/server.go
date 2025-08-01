@@ -5,7 +5,6 @@ import (
 	"log"
 	"net"
 	"os"
-	"time"
 
 	order_service "github.com/anarakinson/go_stonks/order/internal/app/order"
 	// "github.com/anarakinson/go_stonks/order/pkg/interceptors"
@@ -20,9 +19,6 @@ import (
 
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/backoff"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/keepalive"
 )
 
 type Server struct {
@@ -66,30 +62,15 @@ func (s *Server) Run() error {
 		"Create connection to spot insrtument service",
 		zap.String("service address", os.Getenv("SPOT_INSTRUMENT_ADDR")),
 	)
-	spotConn, err := grpc.NewClient(
+	// Без TLS (для тестов)
+	spotConn, err := NewGRPCClient(
 		os.Getenv("SPOT_INSTRUMENT_ADDR"),
-		//
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		// OpenTelemetry трассировщик
-		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
-		// добавляем интерсепторы
-		grpc.WithUnaryInterceptor(
-			interceptors.XRequestIDClient(), // x-request-id interceptor
-			// interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
-		),
-		// поддержка соединения
-		grpc.WithKeepaliveParams(keepalive.ClientParameters{
-			Time:    10 * time.Second,
-			Timeout: 5 * time.Second,
-		}),
-		// балансировщик нагрузки
-		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
-		// Параметры подключения
-		grpc.WithConnectParams(grpc.ConnectParams{
-			MinConnectTimeout: 5 * time.Second,
-			Backoff:           backoff.DefaultConfig,
-		}),
+		nil, // TLS настройки
+		// интерсепторы
+		interceptors.XRequestIDClient(), // x-request-id interceptor
+		// interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
 	)
+
 	if err != nil {
 		log.Fatalf("Order service connection failed: %v", err)
 	}
