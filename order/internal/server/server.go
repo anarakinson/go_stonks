@@ -7,10 +7,10 @@ import (
 	"os"
 
 	order_service "github.com/anarakinson/go_stonks/order/internal/app/order"
-	// "github.com/anarakinson/go_stonks/order/pkg/interceptors"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
 
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/grpc_helpers"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"go.uber.org/zap"
@@ -63,14 +63,13 @@ func (s *Server) Run() error {
 		zap.String("service address", os.Getenv("SPOT_INSTRUMENT_ADDR")),
 	)
 	// Без TLS (для тестов)
-	spotConn, err := NewGRPCClient(
+	spotConn, err := grpc_helpers.NewGRPCClient(
 		os.Getenv("SPOT_INSTRUMENT_ADDR"),
 		nil, // TLS настройки
 		// интерсепторы
 		interceptors.XRequestIDClient(), // x-request-id interceptor
 		// interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
 	)
-
 	if err != nil {
 		log.Fatalf("Order service connection failed: %v", err)
 	}

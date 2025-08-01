@@ -14,7 +14,7 @@ services:
       - observability-net
 
 
-  # Prometheus + Grafana
+  # Prometheus 
   prometheus:
     image: prom/prometheus:latest
     restart: unless-stopped
@@ -27,6 +27,7 @@ services:
       - observability-net
 
 
+  # Alertmanager
   alertmanager:
     image: prom/alertmanager:v0.28.0
     restart: unless-stopped
@@ -47,13 +48,14 @@ services:
       - observability-net
 
 
+  # Grafana
   grafana:
     image: grafana/grafana:latest
     restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:
-      - grafana-data:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
     networks:
       - observability-net
     depends_on:
@@ -63,6 +65,21 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin123
       - GF_INSTANCE_NAME=my-grafana
 
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - observability-net
+
+
 networks:
   observability-net:
     driver: bridge
@@ -70,4 +87,5 @@ networks:
 
     
 volumes:
-  grafana-data:
+  grafana_data:
+  redis_data:

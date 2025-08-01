@@ -14,6 +14,8 @@ import (
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracing"
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/grpc_helpers"
+	
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
@@ -59,28 +61,12 @@ func main() {
 	target_address := os.Getenv("TARGET_ADDR")
 	fmt.Println(target_address)
 
-	conn, err := grpc.NewClient(
+	// Без TLS (для тестов)
+	conn, err := grpc_helpers.NewGRPCClient(
 		target_address,
-		// настройки соединения (без шифрования)
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		// поддержка соединения
-		grpc.WithKeepaliveParams(keepalive.ClientParameters{
-			Time:    10 * time.Second, // проверка соединения каждые 10с
-			Timeout: 5 * time.Second,  // разрыв при зависании на 5с
-		}),
-		// балансировщик нагрузки
-		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin":{}}]}`),
-		// Параметры подключения
-		grpc.WithConnectParams(grpc.ConnectParams{
-			MinConnectTimeout: 5 * time.Second,       // минимальное время попытки подключения
-			Backoff:           backoff.DefaultConfig, // экспоненциальная задержка между попытками
-		}),
-		// OpenTelemetry трассировщик
-		grpc.WithStatsHandler(otelgrpc.NewClientHandler()),
-		// добавляем интерсепторы
-		grpc.WithChainUnaryInterceptor(
-			interceptors.XRequestIDClient(), // x-request-id interceptor
-		),
+		nil, // TLS настройки
+		// интерсепторы
+		interceptors.XRequestIDClient(), // x-request-id interceptor
 	)
 	if err != nil {
 		log.Fatalf("Connection failed: %v", err)
