@@ -5,98 +5,101 @@ groups:
   # Горутины
   # Слишком большое количество горутин
   - alert: TooManyGoroutines
-    expr: goroutines_total > 5000
+    expr: |
+      sum by (service) (goroutines_total{service=~"order|spot_instrument"}) > 5000
     for: 5m
     labels:
       severity: warning
-      service: "app"
+      service: "{{ $labels.service }}"
     annotations:
-      summary: "Too many goroutines"
-      description: "Application has too many goroutines running for more than 5 minutes."
-
+      summary: "Too many goroutines in {{ $labels.service }}"
+      description: "Service {{ $labels.service }} has {{ $value }} goroutines running for more than 5 minutes."
+  
   # Резкий рост горутин
   - alert: GoroutinesSpike
     expr: |
-      (go_goroutines{job="app"} - go_goroutines{job="app"} offset 1m) > 50
+      (go_goroutines{service=~"order|spot_instrument"} - go_goroutines{service=~"order|spot_instrument"} offset 1m) > 50
     # rate(goroutines_total[5m]) > 50
     for: 2m
     labels:
       severity: critical
-      service: "app"
+      service: "{{ $labels.service }}"
     annotations:
-      summary: "Rapid goroutines growth"
-      description: "Goroutines count is growing too fast."
+      summary: "Rapid goroutines growth in {{ $labels.service }}"
+      description: "Service {{ $labels.service }} goroutines spiked by {{ $value }} in 1 minute"
+
 
   # Память
   # Высокое использование heap-памяти
   - alert: HighHeapMemoryUsage
-    expr: memory_usage_bytes{type="heap"} > 2 * 1024 * 1024 * 1024  # 2GB
+    expr: memory_usage_bytes{type="heap", service=~"order|spot_instrument"} > 2 * 1024 * 1024 * 1024  # 2GB
     for: 10m
     labels:
       severity: warning
-      service: "app"
+      service: "{{ $labels.service }}"
     annotations:
       summary: "High heap memory usage (over 2GB)"
-      description: "Heap memory usage is critically high."
+      description: "Service {{ $labels.service }} - heap memory usage is critically high: {{ $value }}."
 
   # Утечка памяти (постоянный рост)
   - alert: MemoryLeakDetected
-    expr: rate(memory_usage_bytes{type="heap"}[1h]) > 1024 * 1024  # 1MB/s growth
+    expr: rate(memory_usage_bytes{type="heap", service=~"order|spot_instrument"}[1h]) > 1024 * 1024  # 1MB/s growth
     for: 30m
     labels:
       severity: critical
-      service: "app"
+      service: "{{ $labels.service }}"
     annotations:
       summary: "Possible memory leak (growth over 1MB/s)"
-      description: "Memory shows consistent growth over 30 minutes."
+      description: "Service {{ $labels.service }} - memory shows consistent growth over 30 minutes."
 
   # Сборка мусора
   # Слишком частый GC (давление на CPU)
   - alert: HighGCRate
-    expr: rate(gc_runs_total[5m]) > 10
+    expr: rate(gc_runs_total{service=~"order|spot_instrument"}[5m]) > 10
     for: 5m
     labels:
       severity: warning
-      service: "app"
+      service: "{{ $labels.service }}"
     annotations:
       summary: "High GC frequency (over 10 runs/s)"
-      description: "Garbage collection is running too frequently."
+      description: "Service {{ $labels.service }} - garbage collection is running too frequently: {{ $value }}."
 
   # Внезапная остановка GC
   - alert: GCStalled
-    expr: rate(gc_runs_total[15m]) == 0
+    expr: rate(gc_runs_total{service=~"order|spot_instrument"}[15m]) == 0
     for: 15m
     labels:
       severity: critical
-      service: "app"
+      service: "{{ $labels.service }}"
     annotations:
       summary: "No GC runs detected"
-      description: "Garbage collector hasn't run for 15 minutes."
+      description: "Service {{ $labels.service }} - garbage collector hasn't run for 15 minutes."
 
   # Высокое использование памяти + частый GC
   - alert: MemoryPressure
     expr: |
-      memory_usage_bytes{type="heap"} > 1.5 * 1024 * 1024 * 1024
+      memory_usage_bytes{type="heap", service=~"order|spot_instrument"} > 1.5 * 1024 * 1024 * 1024
       AND
-      rate(gc_runs_total[5m]) > 5
+      rate(gc_runs_total{service=~"order|spot_instrument"}[5m]) > 5
     for: 10m
     labels:
       severity: critical
-      service: "app"
+      service: "{{ $labels.service }}"
     annotations:
       summary: "Memory pressure detected"
-      description: "High heap usage with frequent GC."
+      description: "Service {{ $labels.service }} - high heap usage with frequent GC."
 
   # Старт и остановка приложения
   # Приложение выключилось (упало)
   - alert: ApplicationDown
-    expr: up{job="app"} == 0
+    expr: up{service=~"order|spot_instrument"} == 0
     for: 1m  # Длительность состояния перед срабатыванием
     labels:
       severity: critical
+      service: "{{ $labels.service }}"
     annotations:
       summary: "Application is down!"
-      description: "The application has not sent metrics for more than 1 minute. The service may have crashed or been disabled."
+      description: "Service {{ $labels.service }} has not sent metrics for more than 1 minute. The service may have crashed or been disabled."
 
   # # Приложение запустилось
   # - alert: ApplicationStarted

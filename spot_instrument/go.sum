@@ -1,7 +1,7 @@
 github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250730122518-5f83e648b876 h1:+XJsXRFoVzMboyEU7wYVCnUvGvOquv/LzhhtcKkpIJo=
 github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250730122518-5f83e648b876/go.mod h1:bXDlEjJtaX601tuitDCmxeMA5c/RDbxL0IqxYO+RVrA=
-github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731094122-e59828450c4d h1:onZGbcSWkvKppRcpkeo+Z5sPRyKUCu2+SQfUdeBOZm4=
-github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731094122-e59828450c4d/go.mod h1:it0wM/Fim5MW9fmH2NvHYUVfb/B3D3fEIKXaKf8+ylM=
+github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731202326-1f3b788ee6bb h1:a1NU5jV+vXQK8AEQEkDogcfKydakAKcnoFBY3t4O5QU=
+github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731202326-1f3b788ee6bb/go.mod h1:jsQLILLk+6cbihBLyz6vT9e/4r02woYq8W1ihh2YlFg=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/cenkalti/backoff/v5 v5.0.2 h1:rIfFVxEf1QsI7E1ZHfp/B4DF/6QBAUhmgkxc0H7Zss8=
@@ -27,6 +27,10 @@ github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1 h1:X5VWvz21y3gzm9Nw/kaUeku/1+u
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1/go.mod h1:Zanoh4+gvIgluNqcfMVTJueD4wSS5hT7zTt4Mrutd90=
 github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
 github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
+github.com/klauspost/compress v1.18.0 h1:c/Cqfb0r+Yi+JtIEq73FWXVkRonBlf0CRNYc8Zttxdo=
+github.com/klauspost/compress v1.18.0/go.mod h1:2Pp+KzxcywXVXMr50+X0Q/Lsb43OQHYWRCY2AiWywWQ=
+github.com/kylelemons/godebug v1.1.0 h1:RPNrshWIDI6G2gRW9EHilWtl7Z6Sb1BR0xunSBf0SNc=
+github.com/kylelemons/godebug v1.1.0/go.mod h1:9/0rRGxNHcop5bhtWyNeEfOS8JIWk580+fNqagV/RAw=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

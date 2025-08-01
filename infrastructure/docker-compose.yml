@@ -4,6 +4,7 @@ version: '3.8'
 services:
   # Jaeger для трассировки
   jaeger:
+    restart: unless-stopped
     image: jaegertracing/all-in-one:1.53
     ports:
       - "16686:16686"   # UI
@@ -16,10 +17,12 @@ services:
   # Prometheus + Grafana
   prometheus:
     image: prom/prometheus:latest
+    restart: unless-stopped
     ports:
       - "9090:9090"
     volumes:
-      - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      # - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./configs/prometheus:/etc/prometheus  
     networks:
       - observability-net
 
@@ -40,10 +43,13 @@ services:
     # делаем подстановку переменных окружения в шаблон конфига 
     entrypoint: /alertmanager.sh
     command: /bin/alertmanager --config.file=/etc/alertmanager/alertmanager.yml
+    networks:
+      - observability-net
 
 
   grafana:
     image: grafana/grafana:latest
+    restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:
@@ -52,7 +58,10 @@ services:
       - observability-net
     depends_on:
       - prometheus
-
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_INSTANCE_NAME=my-grafana
 
 networks:
   observability-net:

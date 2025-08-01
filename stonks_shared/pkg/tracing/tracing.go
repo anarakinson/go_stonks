@@ -2,6 +2,8 @@ package tracing
 
 import (
 	"context"
+	"crypto/tls"
+	"fmt"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
@@ -9,19 +11,30 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
+	"google.golang.org/grpc/credentials"
 )
 
-func InitTracerProvider(serviceName string) (*sdktrace.TracerProvider, error) {
+func InitTracerProvider(jaegerEndpoint, serviceName, serviceVersion, deploymentEnv string, tlsConfig *tls.Config) (*sdktrace.TracerProvider, error) {
 	ctx := context.Background()
 
 	// Подключаемся к Jaeger через OTLP/gRPC (порт 4317)
-	traceExporter, err := otlptracegrpc.New(
-		ctx,
-		otlptracegrpc.WithEndpoint("jaeger:4317"), // или localhost:4317
-		otlptracegrpc.WithInsecure(),              // для тестов (без TLS)
-	)
+	opts := []otlptracegrpc.Option{
+		otlptracegrpc.WithEndpoint(jaegerEndpoint), // "jaeger:4317" или localhost:4317
+	}
+
+	if tlsConfig != nil {
+		// Дефолтная конфигурация TLS если не передана
+		tlsConfig = &tls.Config{
+			MinVersion: tls.VersionTLS12,
+		}
+		opts = append(opts, otlptracegrpc.WithTLSCredentials(credentials.NewTLS(tlsConfig)))
+	} else {
+		opts = append(opts, otlptracegrpc.WithInsecure()) // для тестов (без TLS)
+	}
+
+	traceExporter, err := otlptracegrpc.New(ctx, opts...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create trace exporter: %w", err)
 	}
 
 	// Ресурсы трейсов (метаданные сервиса)
@@ -29,8 +42,8 @@ func InitTracerProvider(serviceName string) (*sdktrace.TracerProvider, error) {
 		ctx,
 		resource.WithAttributes(
 			semconv.ServiceName(serviceName),
-			semconv.ServiceVersion("1.0.0"),
-			semconv.DeploymentEnvironment("production"),
+			semconv.ServiceVersion(serviceVersion),       // "1.0.0"
+			semconv.DeploymentEnvironment(deploymentEnv), // production / development
 		),
 	)
 	if err != nil {
@@ -38,12 +51,16 @@ func InitTracerProvider(serviceName string) (*sdktrace.TracerProvider, error) {
 	}
 
 	// Настраиваем TracerProvider
+	traceIDRatio := 1.0
+	if deploymentEnv == "production" {
+		traceIDRatio = 0.1
+	}
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(traceExporter),
 		sdktrace.WithResource(res),
 		sdktrace.WithSampler(
 			sdktrace.ParentBased(
-				sdktrace.TraceIDRatioBased(1.0), // 100% трейсов (для прода — 0.1)
+				sdktrace.TraceIDRatioBased(traceIDRatio), // 100% трейсов (для прода — 0.1)
 			),
 		),
 	)

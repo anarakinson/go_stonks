@@ -4,7 +4,7 @@ go 1.24.3
 
 require (
 	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250730122518-5f83e648b876
-	github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731094122-e59828450c4d
+	github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250731202326-1f3b788ee6bb
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/joho/godotenv v1.5.1
