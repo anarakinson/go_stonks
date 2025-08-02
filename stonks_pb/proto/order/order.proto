@@ -46,6 +46,7 @@ message CreateOrderResponse {
 
 // Запрос списка доступных рынков
 message GetMarketsRequest {
+    market.UserRole user_roles = 1;     // Роли пользователя для проверки доступа
 }
 
 // Ответ со списком доступных рынков

@@ -25,7 +25,7 @@ const (
 // Запрос для получения списка рынков
 type ViewMarketsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserRoles     []market.UserRole      `protobuf:"varint,1,rep,packed,name=user_roles,json=userRoles,proto3,enum=market.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
+	UserRoles     market.UserRole        `protobuf:"varint,1,opt,name=user_roles,json=userRoles,proto3,enum=market.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -60,11 +60,11 @@ func (*ViewMarketsRequest) Descriptor() ([]byte, []int) {
 	return file_spot_instrument_spot_instrument_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ViewMarketsRequest) GetUserRoles() []market.UserRole {
+func (x *ViewMarketsRequest) GetUserRoles() market.UserRole {
 	if x != nil {
 		return x.UserRoles
 	}
-	return nil
+	return market.UserRole(0)
 }
 
 // Ответ со списком доступных рынков
@@ -119,7 +119,7 @@ const file_spot_instrument_spot_instrument_proto_rawDesc = "" +
 	"%spot_instrument/spot_instrument.proto\x12\x0fspot_instrument\x1a\x13market/market.proto\"E\n" +
 	"\x12ViewMarketsRequest\x12/\n" +
 	"\n" +
-	"user_roles\x18\x01 \x03(\x0e2\x10.market.UserRoleR\tuserRoles\"?\n" +
+	"user_roles\x18\x01 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\"?\n" +
 	"\x13ViewMarketsResponse\x12(\n" +
 	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketR\amarkets2q\n" +
 	"\x15SpotInstrumentService\x12X\n" +

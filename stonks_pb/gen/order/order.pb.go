@@ -347,6 +347,7 @@ func (x *CreateOrderResponse) GetStatus() string {
 // Запрос списка доступных рынков
 type GetMarketsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserRoles     market.UserRole        `protobuf:"varint,1,opt,name=user_roles,json=userRoles,proto3,enum=market.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -379,6 +380,13 @@ func (x *GetMarketsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetMarketsRequest.ProtoReflect.Descriptor instead.
 func (*GetMarketsRequest) Descriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetMarketsRequest) GetUserRoles() market.UserRole {
+	if x != nil {
+		return x.UserRoles
+	}
+	return market.UserRole(0)
 }
 
 // Ответ со списком доступных рынков
@@ -544,8 +552,10 @@ const file_order_order_proto_rawDesc = "" +
 	"\bquantity\x18\x05 \x01(\x01R\bquantity\"H\n" +
 	"\x13CreateOrderResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\"\x13\n" +
-	"\x11GetMarketsRequest\">\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\"D\n" +
+	"\x11GetMarketsRequest\x12/\n" +
+	"\n" +
+	"user_roles\x18\x01 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\">\n" +
 	"\x12GetMarketsResponse\x12(\n" +
 	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketR\amarkets\"/\n" +
 	"\x14GetUserOrdersRequest\x12\x17\n" +
@@ -582,25 +592,27 @@ var file_order_order_proto_goTypes = []any{
 	(*GetMarketsResponse)(nil),     // 6: order.GetMarketsResponse
 	(*GetUserOrdersRequest)(nil),   // 7: order.GetUserOrdersRequest
 	(*GetUserOrdersResponse)(nil),  // 8: order.GetUserOrdersResponse
-	(*market.Market)(nil),          // 9: market.Market
+	(market.UserRole)(0),           // 9: market.UserRole
+	(*market.Market)(nil),          // 10: market.Market
 }
 var file_order_order_proto_depIdxs = []int32{
-	0, // 0: order.GetOrderStatusResponse.order:type_name -> order.Order
-	9, // 1: order.GetMarketsResponse.markets:type_name -> market.Market
-	0, // 2: order.GetUserOrdersResponse.orders:type_name -> order.Order
-	1, // 3: order.OrderService.GetOrderStatus:input_type -> order.GetOrderStatusRequest
-	3, // 4: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
-	5, // 5: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
-	7, // 6: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
-	2, // 7: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
-	4, // 8: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
-	6, // 9: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
-	8, // 10: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
-	7, // [7:11] is the sub-list for method output_type
-	3, // [3:7] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0,  // 0: order.GetOrderStatusResponse.order:type_name -> order.Order
+	9,  // 1: order.GetMarketsRequest.user_roles:type_name -> market.UserRole
+	10, // 2: order.GetMarketsResponse.markets:type_name -> market.Market
+	0,  // 3: order.GetUserOrdersResponse.orders:type_name -> order.Order
+	1,  // 4: order.OrderService.GetOrderStatus:input_type -> order.GetOrderStatusRequest
+	3,  // 5: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
+	5,  // 6: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
+	7,  // 7: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
+	2,  // 8: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
+	4,  // 9: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
+	6,  // 10: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
+	8,  // 11: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
+	8,  // [8:12] is the sub-list for method output_type
+	4,  // [4:8] is the sub-list for method input_type
+	4,  // [4:4] is the sub-list for extension type_name
+	4,  // [4:4] is the sub-list for extension extendee
+	0,  // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_order_order_proto_init() }
