@@ -18,6 +18,9 @@ services:
       - SPOT_INSTRUMENT_ADDR=${SPOT_INSTRUMENT_ADDR}
       - JAEGER_AGENT_HOST=jaeger
       - JAEGER_AGENT_PORT=6831
+      - REDIS_ADDRESS="redis:6379"
+      - REDIS_PASSWORD=""
+      - REDIS_DB=0
     networks:
       observability-net:
         aliases:

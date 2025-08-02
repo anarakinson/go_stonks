@@ -86,7 +86,7 @@ func main() {
 	// запускаем фоновое обновление маркетов
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	go StartUpdatingMarkets(ctx, repo, redisClient)
+	go server.StartUpdatingMarkets(ctx, repo, redisClient)
 
 	//--------------------------------------------//
 	// создаем и запускаем сервер

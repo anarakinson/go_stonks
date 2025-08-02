@@ -4,11 +4,9 @@ go 1.24.3
 
 require (
 	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250728150615-cea59a309904
-	github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250801113030-834f8e9520a1
+	github.com/anarakinson/go_stonks_shared v0.0.1
 	github.com/joho/godotenv v1.5.1
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0
 	go.uber.org/zap v1.27.0
-	google.golang.org/grpc v1.74.2
 )
 
 require (
@@ -18,6 +16,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0 // indirect
 	go.opentelemetry.io/otel v1.37.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.37.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.37.0 // indirect
@@ -31,5 +30,6 @@ require (
 	golang.org/x/text v0.26.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 // indirect
+	google.golang.org/grpc v1.74.2 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 )

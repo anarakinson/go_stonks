@@ -17,4 +17,6 @@
 # environment variables
 .env
 
+./stonks_shared
+
 task.md
