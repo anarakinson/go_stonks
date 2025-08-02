@@ -5,6 +5,7 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"strconv"
 
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/repository/inmemory"
@@ -12,6 +13,7 @@ import (
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/metrics"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracing"
+	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 
 	"github.com/joho/godotenv"
@@ -56,6 +58,21 @@ func main() {
 	}()
 
 	//--------------------------------------------//
+	// создаем клиент редиса
+	redisDB, err := strconv.Atoi(os.Getenv("REDIS_DB"))
+	if err != nil {
+		slog.Error("Error loading REDIS_DB env variable", "error", err)
+		return
+	}
+	redisClient := redis.NewClient(
+		&redis.Options{
+			Addr:     os.Getenv("REDIS_ADDRESS"),
+			Password: os.Getenv("REDIS_PASSWORD"),
+			DB:       redisDB,
+		},
+	)
+
+	//--------------------------------------------//
 	// создаем хранилище с моками рынков
 	repo := inmemory.NewRepository()
 	repo.AddMarket(domain.NewMarket("BTC-USDT", true))
@@ -65,6 +82,11 @@ func main() {
 	solMarket := domain.NewMarket("SOL/USDT", true)
 	solMarket.Delete()
 	repo.AddMarket(solMarket)
+
+	// запускаем фоновое обновление маркетов
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go StartUpdatingMarkets(ctx, repo, redisClient)
 
 	//--------------------------------------------//
 	// создаем и запускаем сервер

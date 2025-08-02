@@ -4,9 +4,11 @@ go 1.24.3
 
 require (
 	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250730122518-5f83e648b876
+	github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250801101032-6a7085ebc6dc
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/joho/godotenv v1.5.1
+	github.com/redis/go-redis/v9 v9.11.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0
 	go.uber.org/zap v1.27.0
 	google.golang.org/grpc v1.74.2
@@ -17,6 +19,7 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1 // indirect

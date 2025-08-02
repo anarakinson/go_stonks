@@ -2,7 +2,7 @@ package interceptors
 
 import (
 	"context"
-	"log"
+	"log/slog"
 	"runtime/debug"
 
 	"google.golang.org/grpc"
@@ -21,7 +21,7 @@ func UnaryPanicRecoveryInterceptor() grpc.UnaryServerInterceptor {
 
 		defer func() {
 			if r := recover(); r != nil {
-				log.Printf("panic recovered: %v, stack: %s", r, string(debug.Stack()))
+				slog.Info("panic recovered", "recovery info", r, "stack", string(debug.Stack()))
 				err = status.Errorf(codes.Internal, "internal server error")
 			}
 		}()

@@ -4,6 +4,7 @@ go 1.24.3
 
 require (
 	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250728150615-cea59a309904
+	github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250801113030-834f8e9520a1
 	github.com/joho/godotenv v1.5.1
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0
 	go.uber.org/zap v1.27.0

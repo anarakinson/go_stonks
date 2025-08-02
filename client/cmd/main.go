@@ -7,24 +7,17 @@ import (
 	"log"
 	"log/slog"
 	"os"
-	"time"
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
 
+	"github.com/anarakinson/go_stonks/stonks_shared/pkg/grpc_helpers"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracing"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/grpc_helpers"
-	
 
 	"github.com/joho/godotenv"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/backoff"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/keepalive"
 
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
-	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 )
 
 func main() {

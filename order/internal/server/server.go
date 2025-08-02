@@ -5,10 +5,13 @@ import (
 	"log"
 	"net"
 	"os"
+	"strconv"
+	"time"
 
 	order_service "github.com/anarakinson/go_stonks/order/internal/app/order"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
+	"github.com/redis/go-redis/v9"
 
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/grpc_helpers"
 	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
@@ -43,6 +46,24 @@ func (s *Server) Run() error {
 		return err
 	}
 
+	//--------------------------------------------//
+	// создаем клиент редиса
+	redisDB, err := strconv.Atoi(os.Getenv("REDIS_DB"))
+	if err != nil {
+		return err
+	}
+	redisClient := redis.NewClient(
+		&redis.Options{
+			Addr:     os.Getenv("REDIS_ADDRESS"),
+			Password: os.Getenv("REDIS_PASSWORD"),
+			DB:       redisDB,
+		},
+	)
+
+	// Создаем интерсептор
+	cacheInterceptor := interceptors.NewRedisCacheInterceptor(redisClient)
+	cacheInterceptor.Subscribe("markets:list", "markets:invalidated")
+
 	// создаем сервер GRPC
 	gs := grpc.NewServer(
 		// OpenTelemetry трассировщик
@@ -68,6 +89,11 @@ func (s *Server) Run() error {
 		nil, // TLS настройки
 		// интерсепторы
 		interceptors.XRequestIDClient(), // x-request-id interceptor
+		cacheInterceptor.Unary(
+			"markets:list",
+			spot_inst_pb.SpotInstrumentService_ViewMarkets_FullMethodName,
+			5*time.Minute,
+		), // интерсептор, кеширующий данные о маркетах
 		// interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
 	)
 	if err != nil {

@@ -56,14 +56,14 @@ services:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
-    networks:
-      - observability-net
     depends_on:
       - prometheus
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin123
       - GF_INSTANCE_NAME=my-grafana
+    networks:
+      - observability-net
 
 
   # Redis
