@@ -12,7 +12,7 @@ import (
 
 // функция периодически добавляет и удаляет новый маркет в репозиторий
 func StartUpdatingMarkets(ctx context.Context, repo spot_instrument.Repository, redisClient *redis.Client) {
-	ticker := time.NewTicker(3 * time.Minute)
+	ticker := time.NewTicker(60 * time.Second)
 	defer ticker.Stop()
 
 	counter := 0
@@ -23,16 +23,21 @@ func StartUpdatingMarkets(ctx context.Context, repo spot_instrument.Repository, 
 			return
 		case <-ticker.C:
 
+			// удаляем старый маркет, если он четный
+			if counter%2 == 0 {
+				oldMarket, ok := repo.GetMarket(fmt.Sprintf("UnnamedMarket#%d", counter))
+				if ok {
+					oldMarket.Delete()
+				}
+			}
+
+			counter++
+
 			// создаем новый безымянный	маркет
-			solMarket := domain.NewMarket(fmt.Sprintf("UnnamedMarket#%d", counter), true)
+			newMarket := domain.NewMarket(fmt.Sprintf("UnnamedMarket#%d", counter), true)
 
 			// добавляем безымянный маркет в репозиторий
-			repo.AddMarket(solMarket)
-
-			// ждем минуту
-			time.Sleep(2 * time.Minute)
-			// удаляем новый маркет
-			solMarket.Delete()
+			repo.AddMarket(newMarket)
 
 			// оповещаем редис через PubSub
 			redisClient.Publish(ctx, "markets:invalidated", "markets:list")

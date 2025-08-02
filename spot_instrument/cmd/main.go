@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"log/slog"
 	"os"
@@ -59,18 +60,27 @@ func main() {
 
 	//--------------------------------------------//
 	// создаем клиент редиса
+	redisAddr := os.Getenv("REDIS_ADDRESS")
+	redisPass := os.Getenv("REDIS_PASSWORD")
 	redisDB, err := strconv.Atoi(os.Getenv("REDIS_DB"))
 	if err != nil {
 		slog.Error("Error loading REDIS_DB env variable", "error", err)
 		return
 	}
+	fmt.Println(redisAddr, redisPass, redisDB)
 	redisClient := redis.NewClient(
 		&redis.Options{
-			Addr:     os.Getenv("REDIS_ADDRESS"),
-			Password: os.Getenv("REDIS_PASSWORD"),
+			Addr:     "redis:6379",
+			Password: redisPass,
 			DB:       redisDB,
 		},
 	)
+	// пингуем редис
+	_, err = redisClient.Ping(context.Background()).Result()
+	if err != nil {
+		logger.Log.Error("redis ping failed", zap.Error(err))
+		return
+	}
 
 	//--------------------------------------------//
 	// создаем хранилище с моками рынков

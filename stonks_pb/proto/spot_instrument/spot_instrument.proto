@@ -8,7 +8,7 @@ import "market/market.proto";
 
 // Запрос для получения списка рынков
 message ViewMarketsRequest {
-    repeated string user_roles = 1;     // Роли пользователя для проверки доступа
+    repeated market.UserRole user_roles = 1;     // Роли пользователя для проверки доступа
 }
 
 // Ответ со списком доступных рынков

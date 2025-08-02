@@ -25,7 +25,7 @@ const (
 // Запрос для получения списка рынков
 type ViewMarketsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserRoles     []string               `protobuf:"bytes,1,rep,name=user_roles,json=userRoles,proto3" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
+	UserRoles     []market.UserRole      `protobuf:"varint,1,rep,packed,name=user_roles,json=userRoles,proto3,enum=market.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -60,7 +60,7 @@ func (*ViewMarketsRequest) Descriptor() ([]byte, []int) {
 	return file_spot_instrument_spot_instrument_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *ViewMarketsRequest) GetUserRoles() []string {
+func (x *ViewMarketsRequest) GetUserRoles() []market.UserRole {
 	if x != nil {
 		return x.UserRoles
 	}
@@ -116,10 +116,10 @@ var File_spot_instrument_spot_instrument_proto protoreflect.FileDescriptor
 
 const file_spot_instrument_spot_instrument_proto_rawDesc = "" +
 	"\n" +
-	"%spot_instrument/spot_instrument.proto\x12\x0fspot_instrument\x1a\x13market/market.proto\"3\n" +
-	"\x12ViewMarketsRequest\x12\x1d\n" +
+	"%spot_instrument/spot_instrument.proto\x12\x0fspot_instrument\x1a\x13market/market.proto\"E\n" +
+	"\x12ViewMarketsRequest\x12/\n" +
 	"\n" +
-	"user_roles\x18\x01 \x03(\tR\tuserRoles\"?\n" +
+	"user_roles\x18\x01 \x03(\x0e2\x10.market.UserRoleR\tuserRoles\"?\n" +
 	"\x13ViewMarketsResponse\x12(\n" +
 	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketR\amarkets2q\n" +
 	"\x15SpotInstrumentService\x12X\n" +
@@ -141,17 +141,19 @@ var file_spot_instrument_spot_instrument_proto_msgTypes = make([]protoimpl.Messa
 var file_spot_instrument_spot_instrument_proto_goTypes = []any{
 	(*ViewMarketsRequest)(nil),  // 0: spot_instrument.ViewMarketsRequest
 	(*ViewMarketsResponse)(nil), // 1: spot_instrument.ViewMarketsResponse
-	(*market.Market)(nil),       // 2: market.Market
+	(market.UserRole)(0),        // 2: market.UserRole
+	(*market.Market)(nil),       // 3: market.Market
 }
 var file_spot_instrument_spot_instrument_proto_depIdxs = []int32{
-	2, // 0: spot_instrument.ViewMarketsResponse.markets:type_name -> market.Market
-	0, // 1: spot_instrument.SpotInstrumentService.ViewMarkets:input_type -> spot_instrument.ViewMarketsRequest
-	1, // 2: spot_instrument.SpotInstrumentService.ViewMarkets:output_type -> spot_instrument.ViewMarketsResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	2, // 0: spot_instrument.ViewMarketsRequest.user_roles:type_name -> market.UserRole
+	3, // 1: spot_instrument.ViewMarketsResponse.markets:type_name -> market.Market
+	0, // 2: spot_instrument.SpotInstrumentService.ViewMarkets:input_type -> spot_instrument.ViewMarketsRequest
+	1, // 3: spot_instrument.SpotInstrumentService.ViewMarkets:output_type -> spot_instrument.ViewMarketsResponse
+	3, // [3:4] is the sub-list for method output_type
+	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_spot_instrument_spot_instrument_proto_init() }

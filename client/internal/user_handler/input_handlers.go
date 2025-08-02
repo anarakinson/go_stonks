@@ -25,6 +25,25 @@ func (h *UserHandler) GetUserID() (string, error) {
 	return strings.ToLower(strings.TrimSpace(userId)), nil
 }
 
+// func (h *UserHandler) GetUserRole() (string, error) {
+
+// 	fmt.Print("Enter User role: \n")
+// 	fmt.Println("1. Basic")
+// 	fmt.Println("2. Professional")
+// 	fmt.Println("3. Whale")
+
+// 	userRole, err := h.reader.ReadString('\n')
+// 	if err != nil {
+// 		if err == io.EOF {
+// 			fmt.Println("\nEnd")
+// 			return "", ErrFinish
+// 		}
+// 		return "", ErrStdin
+// 	}
+
+// 	return strings.ToLower(strings.TrimSpace(userId)), nil
+// }
+
 func (h *UserHandler) GetMarketID(markets []*pb_market.Market) (string, error) {
 
 	if len(markets) == 0 {

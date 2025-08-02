@@ -1,7 +1,7 @@
 github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250801113030-834f8e9520a1 h1:Uzo9Xbfil7ewlS/e8twMUOLNgaA8YPNbq7AusiQ7zA8=
 github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250801113030-834f8e9520a1/go.mod h1:bXDlEjJtaX601tuitDCmxeMA5c/RDbxL0IqxYO+RVrA=
-github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250802150549-c546997ac8d7 h1:SXP/ULziNTIq6EJ+nBqtIDazpwIXip0q7PP2yfc3HPs=
-github.com/anarakinson/go_stonks/stonks_shared v0.0.0-20250802150549-c546997ac8d7/go.mod h1:zZbfJCyUbHsiB3Dr0weJb1fSnxdCdbbPb7KYTDX5RRI=
+github.com/anarakinson/go_stonks_shared v0.0.4 h1:1G/0CiMabPF4SNPWakq+TjiYtzQrFiy8TagyOjJy77U=
+github.com/anarakinson/go_stonks_shared v0.0.4/go.mod h1:vNlIgC6aYZ7UmV8yYn/4v76oPRwfjp9I12bOLVQWoZY=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/bsm/ginkgo/v2 v2.12.0 h1:Ny8MWAHyOepLGlLKYmXG4IEkioBysk6GpaRTLC8zwWs=
