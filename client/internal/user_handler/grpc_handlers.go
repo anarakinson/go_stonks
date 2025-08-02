@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/domain"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
+	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 
 	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"

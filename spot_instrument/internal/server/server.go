@@ -6,8 +6,8 @@ import (
 
 	spot_instrument_service "github.com/anarakinson/go_stonks/spot_instrument/internal/app/spot_instrument"
 
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
+	"github.com/anarakinson/go_stonks_shared/pkg/interceptors"
+	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"

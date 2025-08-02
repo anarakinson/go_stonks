@@ -10,9 +10,9 @@ import (
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/repository/inmemory"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/server"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/metrics"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracing"
+	"github.com/anarakinson/go_stonks_shared/pkg/logger"
+	"github.com/anarakinson/go_stonks_shared/pkg/metrics"
+	"github.com/anarakinson/go_stonks_shared/pkg/tracing"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 

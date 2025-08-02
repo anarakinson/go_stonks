@@ -10,10 +10,10 @@ import (
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
 
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/grpc_helpers"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/interceptors"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/logger"
-	"github.com/anarakinson/go_stonks/stonks_shared/pkg/tracing"
+	"github.com/anarakinson/go_stonks_shared/pkg/grpc_helpers"
+	"github.com/anarakinson/go_stonks_shared/pkg/interceptors"
+	"github.com/anarakinson/go_stonks_shared/pkg/logger"
+	"github.com/anarakinson/go_stonks_shared/pkg/tracing"
 
 	"github.com/joho/godotenv"
 
