@@ -57,13 +57,13 @@ func (h *UserHandler) GetUserOrders(userId string) (*pb.GetUserOrdersResponse, e
 
 }
 
-func (h *UserHandler) GetMarkets() ([]*pb_market.Market, error) {
+func (h *UserHandler) GetMarkets(userRole pb_market.UserRole) ([]*pb_market.Market, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	logger.Log.Info("Get available markets")
-	markets, err := h.client.GetMarkets(ctx, &pb.GetMarketsRequest{})
+	markets, err := h.client.GetMarkets(ctx, &pb.GetMarketsRequest{UserRoles: userRole})
 
 	if err != nil {
 		logger.Log.Error(

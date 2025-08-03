@@ -87,11 +87,21 @@ func main() {
 		return
 	}
 
+	// Запрашиваем User Role
+	userRole, err := uHandler.GetUserRole()
+	if err != nil {
+		if errors.Is(err, user_handler.ErrFinish) {
+			fmt.Println("End")
+			return
+		}
+		log.Fatalf("Stdin error: %v", err)
+	}
+
 	// переходим в бесконечный цикл. получаем данные - отправляем запрос на сервис
 	for {
 
 		// получаем маркеты от внешнего сервиса
-		markets, err := uHandler.GetMarkets()
+		markets, err := uHandler.GetMarkets(userRole)
 		if err != nil {
 			fmt.Println("Error get available markets.")
 			return

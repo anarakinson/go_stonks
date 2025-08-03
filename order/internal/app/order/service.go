@@ -6,6 +6,8 @@ import (
 	"github.com/anarakinson/go_stonks/order/internal/domain"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
+	"github.com/anarakinson/go_stonks_shared/pkg/logger"
+	"go.uber.org/zap"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -32,9 +34,10 @@ func NewService(spotClient spot_inst_pb.SpotInstrumentServiceClient, repo Reposi
 
 // GetMarkets - получает список доступных рынков у Spot service и возвращает клиенту
 func (s *Service) GetMarkets(ctx context.Context, req *order_pb.GetMarketsRequest) (*order_pb.GetMarketsResponse, error) {
+	logger.Log.Info("received msg", zap.String("user role", req.UserRoles.String()))
 
 	// проверяем, существует ли рынок и доступен ли
-	marketsResp, err := s.spotInstrumentClient.ViewMarkets(ctx, &spot_inst_pb.ViewMarketsRequest{})
+	marketsResp, err := s.spotInstrumentClient.ViewMarkets(ctx, &spot_inst_pb.ViewMarketsRequest{UserRoles: req.UserRoles})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to check market service: %v", err)
 	}

@@ -3,7 +3,7 @@ module github.com/anarakinson/go_stonks/spot_instrument
 go 1.24.3
 
 require (
-	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250730122518-5f83e648b876
+	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250802211914-3e7f53df8413
 	github.com/anarakinson/go_stonks_shared v0.0.3
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0

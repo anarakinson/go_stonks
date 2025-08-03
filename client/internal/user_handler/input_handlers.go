@@ -25,6 +25,41 @@ func (h *UserHandler) GetUserID() (string, error) {
 	return strings.ToLower(strings.TrimSpace(userId)), nil
 }
 
+func (h *UserHandler) GetUserRole() (pb_market.UserRole, error) {
+
+	var input string
+	var err error
+	for input != "exit" {
+		fmt.Print("Enter User role: \n")
+		fmt.Println("1. Basic")
+		fmt.Println("2. Professional")
+		fmt.Println("3. Whale")
+
+		input, err = h.reader.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				return 0, ErrFinish
+			}
+			return 0, ErrStdin
+		}
+		input = strings.ToLower(strings.TrimSpace(input))
+
+		switch input {
+		case "1":
+			return pb_market.UserRole_ROLE_BASIC, nil
+		case "2":
+			return pb_market.UserRole_ROLE_PROFESSIONAL, nil
+		case "3":
+			return pb_market.UserRole_ROLE_WHALE, nil
+		default:
+			fmt.Println("Role must be between 1 and 3")
+		}
+	}
+	// если цикл прервался - прерываем программу
+	return 0, ErrFinish
+
+}
+
 func (h *UserHandler) GetMarketID(markets []*pb_market.Market) (string, error) {
 
 	if len(markets) == 0 {
