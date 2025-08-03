@@ -64,7 +64,7 @@ func (s *Service) GetOrderStatus(ctx context.Context, req *order_pb.GetOrderStat
 func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequest) (*order_pb.CreateOrderResponse, error) {
 
 	// проверяем, существует ли рынок и доступен ли
-	marketsResp, err := s.spotInstrumentClient.ViewMarkets(ctx, &spot_inst_pb.ViewMarketsRequest{})
+	marketsResp, err := s.spotInstrumentClient.ViewMarkets(ctx, &spot_inst_pb.ViewMarketsRequest{UserRoles: req.UserRoles})
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to check markets: %v", err)
 	}

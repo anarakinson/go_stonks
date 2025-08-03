@@ -31,11 +31,12 @@ message GetOrderStatusResponse {
 
 // Запрос на создание заказа
 message CreateOrderRequest {
-    string user_id = 1;        // ID пользователя
-    string market_id = 2;      // ID рынка
-    string order_type = 3;     // Тип заказа
-    double price = 4;          // Цена
-    double quantity = 5;       // Количество
+    string user_id = 1;             // ID пользователя
+    string market_id = 2;           // ID рынка
+    string order_type = 3;          // Тип заказа
+    double price = 4;               // Цена
+    double quantity = 5;            // Количество
+    market.UserRole user_roles = 6; // Роли пользователя для проверки доступа
 }
 
 // Ответ после создания заказа

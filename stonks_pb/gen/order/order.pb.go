@@ -217,11 +217,12 @@ func (x *GetOrderStatusResponse) GetOrder() *Order {
 // Запрос на создание заказа
 type CreateOrderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`          // ID пользователя
-	MarketId      string                 `protobuf:"bytes,2,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`    // ID рынка
-	OrderType     string                 `protobuf:"bytes,3,opt,name=order_type,json=orderType,proto3" json:"order_type,omitempty"` // Тип заказа
-	Price         float64                `protobuf:"fixed64,4,opt,name=price,proto3" json:"price,omitempty"`                        // Цена
-	Quantity      float64                `protobuf:"fixed64,5,opt,name=quantity,proto3" json:"quantity,omitempty"`                  // Количество
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                // ID пользователя
+	MarketId      string                 `protobuf:"bytes,2,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`                          // ID рынка
+	OrderType     string                 `protobuf:"bytes,3,opt,name=order_type,json=orderType,proto3" json:"order_type,omitempty"`                       // Тип заказа
+	Price         float64                `protobuf:"fixed64,4,opt,name=price,proto3" json:"price,omitempty"`                                              // Цена
+	Quantity      float64                `protobuf:"fixed64,5,opt,name=quantity,proto3" json:"quantity,omitempty"`                                        // Количество
+	UserRoles     market.UserRole        `protobuf:"varint,6,opt,name=user_roles,json=userRoles,proto3,enum=market.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -289,6 +290,13 @@ func (x *CreateOrderRequest) GetQuantity() float64 {
 		return x.Quantity
 	}
 	return 0
+}
+
+func (x *CreateOrderRequest) GetUserRoles() market.UserRole {
+	if x != nil {
+		return x.UserRoles
+	}
+	return market.UserRole(0)
 }
 
 // Ответ после создания заказа
@@ -542,14 +550,16 @@ const file_order_order_proto_rawDesc = "" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\"<\n" +
 	"\x16GetOrderStatusResponse\x12\"\n" +
-	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order\"\x9b\x01\n" +
+	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order\"\xcc\x01\n" +
 	"\x12CreateOrderRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
 	"\tmarket_id\x18\x02 \x01(\tR\bmarketId\x12\x1d\n" +
 	"\n" +
 	"order_type\x18\x03 \x01(\tR\torderType\x12\x14\n" +
 	"\x05price\x18\x04 \x01(\x01R\x05price\x12\x1a\n" +
-	"\bquantity\x18\x05 \x01(\x01R\bquantity\"H\n" +
+	"\bquantity\x18\x05 \x01(\x01R\bquantity\x12/\n" +
+	"\n" +
+	"user_roles\x18\x06 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\"H\n" +
 	"\x13CreateOrderResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\"D\n" +
@@ -597,22 +607,23 @@ var file_order_order_proto_goTypes = []any{
 }
 var file_order_order_proto_depIdxs = []int32{
 	0,  // 0: order.GetOrderStatusResponse.order:type_name -> order.Order
-	9,  // 1: order.GetMarketsRequest.user_roles:type_name -> market.UserRole
-	10, // 2: order.GetMarketsResponse.markets:type_name -> market.Market
-	0,  // 3: order.GetUserOrdersResponse.orders:type_name -> order.Order
-	1,  // 4: order.OrderService.GetOrderStatus:input_type -> order.GetOrderStatusRequest
-	3,  // 5: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
-	5,  // 6: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
-	7,  // 7: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
-	2,  // 8: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
-	4,  // 9: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
-	6,  // 10: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
-	8,  // 11: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
-	8,  // [8:12] is the sub-list for method output_type
-	4,  // [4:8] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	9,  // 1: order.CreateOrderRequest.user_roles:type_name -> market.UserRole
+	9,  // 2: order.GetMarketsRequest.user_roles:type_name -> market.UserRole
+	10, // 3: order.GetMarketsResponse.markets:type_name -> market.Market
+	0,  // 4: order.GetUserOrdersResponse.orders:type_name -> order.Order
+	1,  // 5: order.OrderService.GetOrderStatus:input_type -> order.GetOrderStatusRequest
+	3,  // 6: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
+	5,  // 7: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
+	7,  // 8: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
+	2,  // 9: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
+	4,  // 10: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
+	6,  // 11: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
+	8,  // 12: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
+	9,  // [9:13] is the sub-list for method output_type
+	5,  // [5:9] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_order_order_proto_init() }
