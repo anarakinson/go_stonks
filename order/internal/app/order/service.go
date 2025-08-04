@@ -2,8 +2,11 @@ package order_service
 
 import (
 	"context"
+	"sync"
+	"time"
 
 	"github.com/anarakinson/go_stonks/order/internal/domain"
+	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
@@ -23,6 +26,7 @@ type Service struct {
 	order_pb.UnimplementedOrderServiceServer
 	orders               Repository
 	spotInstrumentClient spot_inst_pb.SpotInstrumentServiceClient
+	mu                   sync.RWMutex
 }
 
 func NewService(spotClient spot_inst_pb.SpotInstrumentServiceClient, repo Repository) *Service {
@@ -42,8 +46,19 @@ func (s *Service) GetMarkets(ctx context.Context, req *order_pb.GetMarketsReques
 		return nil, status.Errorf(codes.Internal, "failed to check market service: %v", err)
 	}
 
+	// возвращаем клиенту только маркеты, который подходят по роли
+	markets := []*market_pb.Market{}
+	for _, m := range marketsResp.Markets {
+		for _, role := range m.AllowedRoles {
+			if role == req.UserRoles {
+				markets = append(markets, m)
+				break
+			}
+		}
+	}
+
 	// возвращаем список существующих маркетов (id)
-	return &order_pb.GetMarketsResponse{Markets: marketsResp.Markets}, nil
+	return &order_pb.GetMarketsResponse{Markets: markets}, nil
 }
 
 // GetOrderStatus - возвращает статус заказа
@@ -73,8 +88,14 @@ func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequ
 	var marketExists bool
 	for _, market := range marketsResp.Markets {
 		if market.Id == req.MarketId {
-			marketExists = true
-			break
+			// проверяем, есть ли роль юзера в списке доступа маркета
+			for _, role := range market.AllowedRoles {
+				if role == req.UserRoles {
+					// помечаем маркет, как существующий и прерываемся
+					marketExists = true
+					break
+				}
+			}
 		}
 	}
 
@@ -82,7 +103,11 @@ func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequ
 	if !marketExists {
 		return nil, status.Errorf(codes.NotFound, "market not found or disabled")
 	}
+
+	// формируем ордер
 	order := domain.NewOrder(req.UserId, req.MarketId, req.OrderType, req.Price, req.Quantity)
+	// отправляем ордер на обработку
+	go s.processOrder(order.ID)
 
 	err = s.orders.AddOrder(order)
 	if err != nil {
@@ -111,4 +136,17 @@ func (s *Service) GetUserOrders(ctx context.Context, req *order_pb.GetUserOrders
 
 	// возвращаем респонс
 	return &order_pb.GetUserOrdersResponse{Orders: protoOrders}, nil
+}
+
+// вспомогательная функция, имитирующая бурную деятельность по обработке поступившего заказа
+func (s *Service) processOrder(id string) {
+	time.Sleep(1 * time.Minute)
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	order, ok := s.orders.GetOrder(id)
+	if !ok {
+		logger.Log.Error("error updating order status")
+		return
+	}
+	order.Status = "done"
 }

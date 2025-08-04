@@ -571,9 +571,10 @@ const file_order_order_proto_rawDesc = "" +
 	"\x14GetUserOrdersRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"=\n" +
 	"\x15GetUserOrdersResponse\x12$\n" +
-	"\x06orders\x18\x01 \x03(\v2\f.order.OrderR\x06orders2\xb2\x02\n" +
+	"\x06orders\x18\x01 \x03(\v2\f.order.OrderR\x06orders2\x87\x03\n" +
 	"\fOrderService\x12M\n" +
-	"\x0eGetOrderStatus\x12\x1c.order.GetOrderStatusRequest\x1a\x1d.order.GetOrderStatusResponse\x12D\n" +
+	"\x0eGetOrderStatus\x12\x1c.order.GetOrderStatusRequest\x1a\x1d.order.GetOrderStatusResponse\x12S\n" +
+	"\x12StreamOrderUpdates\x12\x1c.order.GetOrderStatusRequest\x1a\x1d.order.GetOrderStatusResponse0\x01\x12D\n" +
 	"\vCreateOrder\x12\x19.order.CreateOrderRequest\x1a\x1a.order.CreateOrderResponse\x12A\n" +
 	"\n" +
 	"GetMarkets\x12\x18.order.GetMarketsRequest\x1a\x19.order.GetMarketsResponse\x12J\n" +
@@ -612,15 +613,17 @@ var file_order_order_proto_depIdxs = []int32{
 	10, // 3: order.GetMarketsResponse.markets:type_name -> market.Market
 	0,  // 4: order.GetUserOrdersResponse.orders:type_name -> order.Order
 	1,  // 5: order.OrderService.GetOrderStatus:input_type -> order.GetOrderStatusRequest
-	3,  // 6: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
-	5,  // 7: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
-	7,  // 8: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
-	2,  // 9: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
-	4,  // 10: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
-	6,  // 11: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
-	8,  // 12: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
-	9,  // [9:13] is the sub-list for method output_type
-	5,  // [5:9] is the sub-list for method input_type
+	1,  // 6: order.OrderService.StreamOrderUpdates:input_type -> order.GetOrderStatusRequest
+	3,  // 7: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
+	5,  // 8: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
+	7,  // 9: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
+	2,  // 10: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
+	2,  // 11: order.OrderService.StreamOrderUpdates:output_type -> order.GetOrderStatusResponse
+	4,  // 12: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
+	6,  // 13: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
+	8,  // 14: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
+	10, // [10:15] is the sub-list for method output_type
+	5,  // [5:10] is the sub-list for method input_type
 	5,  // [5:5] is the sub-list for extension type_name
 	5,  // [5:5] is the sub-list for extension extendee
 	0,  // [0:5] is the sub-list for field type_name

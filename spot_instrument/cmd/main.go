@@ -85,11 +85,11 @@ func main() {
 	//--------------------------------------------//
 	// создаем хранилище с моками рынков
 	repo := inmemory.NewRepository()
-	repo.AddMarket(domain.NewMarket("BTC-USDT", true))
-	repo.AddMarket(domain.NewMarket("BTC-USDC", true))
-	repo.AddMarket(domain.NewMarket("ETH-USDT", false))
-	repo.AddMarket(domain.NewMarket("ETH-USDC", true))
-	solMarket := domain.NewMarket("SOL/USDT", true)
+	repo.AddMarket(domain.NewMarket("BTC-USDT", true, domain.UserRole_BASIC, domain.UserRole_PROFESSIONAL, domain.UserRole_WHALE))
+	repo.AddMarket(domain.NewMarket("BTC-USDC", true, domain.UserRole_BASIC, domain.UserRole_PROFESSIONAL, domain.UserRole_WHALE))
+	repo.AddMarket(domain.NewMarket("ETH-USDT", false, domain.UserRole_PROFESSIONAL, domain.UserRole_WHALE))
+	repo.AddMarket(domain.NewMarket("ETH-USDC", true, domain.UserRole_PROFESSIONAL, domain.UserRole_WHALE))
+	solMarket := domain.NewMarket("SOL/USDT", true, domain.UserRole_WHALE)
 	solMarket.Delete()
 	repo.AddMarket(solMarket)
 

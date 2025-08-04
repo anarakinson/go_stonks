@@ -69,6 +69,9 @@ message GetUserOrdersResponse {
 service OrderService {
     // Метод для получения статуса заказа
     rpc GetOrderStatus(GetOrderStatusRequest) returns (GetOrderStatusResponse);
+
+    // Стримовый метод обновления статуса заказа
+    rpc StreamOrderUpdates(GetOrderStatusRequest) returns (stream GetOrderStatusResponse);
     
     // Метод для создания нового заказа
     rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);

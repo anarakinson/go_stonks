@@ -3,7 +3,7 @@ module github.com/anarakinson/go_stonks/order
 go 1.24.3
 
 require (
-	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250802211914-3e7f53df8413
+	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250803213336-3c8010e2016a
 	github.com/anarakinson/go_stonks_shared v0.0.5
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0

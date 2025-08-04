@@ -34,7 +34,7 @@ func StartUpdatingMarkets(ctx context.Context, repo spot_instrument.Repository, 
 			counter++
 
 			// создаем новый безымянный	маркет
-			newMarket := domain.NewMarket(fmt.Sprintf("UnnamedMarket#%d", counter), true)
+			newMarket := domain.NewMarket(fmt.Sprintf("UnnamedMarket#%d", counter), true, domain.UserRole_WHALE)
 
 			// добавляем безымянный маркет в репозиторий
 			repo.AddMarket(newMarket)
