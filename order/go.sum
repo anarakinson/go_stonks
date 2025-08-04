@@ -1,5 +1,5 @@
-github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250803213336-3c8010e2016a h1:IOInpAAJDwXWjmPuGLbYFHY3f7RoFHz81+ioU4wY9T8=
-github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250803213336-3c8010e2016a/go.mod h1:bXDlEjJtaX601tuitDCmxeMA5c/RDbxL0IqxYO+RVrA=
+github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250804145520-12dca1623e30 h1:GeZR3IJ89sffV1IwbScFePaoTdERXSpZ6rATZUQwbw0=
+github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250804145520-12dca1623e30/go.mod h1:bXDlEjJtaX601tuitDCmxeMA5c/RDbxL0IqxYO+RVrA=
 github.com/anarakinson/go_stonks_shared v0.0.5 h1:DflifZUcrtZE0UCmj3EN+Pqcc9z7Cxvk05LSZgSvvDc=
 github.com/anarakinson/go_stonks_shared v0.0.5/go.mod h1:vNlIgC6aYZ7UmV8yYn/4v76oPRwfjp9I12bOLVQWoZY=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=

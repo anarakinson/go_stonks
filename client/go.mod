@@ -3,7 +3,7 @@ module github.com/anarakinson/go_stonks/stonks_client
 go 1.24.3
 
 require (
-	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250802211914-3e7f53df8413
+	github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250804145520-12dca1623e30
 	github.com/anarakinson/go_stonks_shared v0.0.3
 	github.com/joho/godotenv v1.5.1
 	go.uber.org/zap v1.27.0

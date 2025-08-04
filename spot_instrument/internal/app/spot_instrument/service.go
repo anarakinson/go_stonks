@@ -39,6 +39,7 @@ func (s *Service) ViewMarkets(ctx context.Context, req *spot_inst_pb.ViewMarkets
 	// получаем доступные маркеты из хранилища
 	available, err := s.markets.GetAvailableMarkets()
 	if err != nil {
+		logger.Log.Error("Error getting markets from repository", zap.Error(err))
 		return nil, status.Errorf(codes.Internal, "failed to check markets: %v", err)
 	}
 

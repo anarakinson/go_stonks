@@ -2,13 +2,12 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"log/slog"
 	"os"
 
-	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
+	"github.com/anarakinson/go_stonks/stonks_client/internal/client"
 
 	"github.com/anarakinson/go_stonks_shared/pkg/grpc_helpers"
 	"github.com/anarakinson/go_stonks_shared/pkg/interceptors"
@@ -66,84 +65,13 @@ func main() {
 	}
 	defer conn.Close()
 
-	client := pb.NewOrderServiceClient(conn)
+	gclient := pb.NewOrderServiceClient(conn)
 
-	// ----------------------------------------- //
-	// начинаем взаимодействие с сервисом
-	// создаем хендлер пользовательского ввода на основе клиента
-	uHandler := user_handler.NewUserHandler(client)
+	cl := client.NewClient(gclient)
 
-	// Запрашиваем UserId
-	userID, err := uHandler.GetUserID()
+	err = cl.HandleUserInput()
 	if err != nil {
-		if errors.Is(err, user_handler.ErrFinish) {
-			fmt.Println("End")
-			return
-		}
-		log.Fatalf("Stdin error: %v", err)
-	}
-	if userID == "exit" {
-		fmt.Println("End")
-		return
-	}
-
-	// Запрашиваем User Role
-	userRole, err := uHandler.GetUserRole()
-	if err != nil {
-		if errors.Is(err, user_handler.ErrFinish) {
-			fmt.Println("End")
-			return
-		}
-		log.Fatalf("Stdin error: %v", err)
-	}
-
-	// переходим в бесконечный цикл. получаем данные - отправляем запрос на сервис
-	for {
-
-		// получаем маркеты от внешнего сервиса
-		markets, err := uHandler.GetMarkets(userRole)
-		if err != nil {
-			fmt.Println("Error get available markets.")
-			return
-		}
-
-		// получаем от пользователя данные и создаем на их основе структуру заказа
-		order, err := uHandler.GetOrder(userID, markets)
-		if err != nil {
-			if errors.Is(err, user_handler.ErrFinish) {
-				fmt.Println("End")
-				return
-			}
-			log.Fatalf("Stdin error: %v", err)
-		}
-
-		// -------------------------------------- //
-		// отправляем запрос к сервису
-
-		// создаем заказ на основе введенных данных
-		resp, err := uHandler.CreateOrderRequest(order)
-		if err != nil {
-			fmt.Println("Error creating order. Try again")
-			continue
-		} else {
-			fmt.Printf("Order created: %v", resp)
-		}
-
-		// -------------------------------------- //
-		// получаем список заказов пользователя
-		fmt.Println("\n***\n")
-		respOrders, err := uHandler.GetUserOrders(order.UserID)
-		if err != nil {
-			fmt.Println("Error getting user orders")
-			continue
-		}
-		for _, o := range respOrders.Orders {
-			fmt.Println("User orders:")
-			fmt.Println(o)
-		}
-
-		// переходим на следующую итерацию цикла
-		fmt.Println("\n***\n")
+		slog.Error("Error handling user input", "error", err)
 	}
 
 }
