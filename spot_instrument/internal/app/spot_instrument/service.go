@@ -17,7 +17,7 @@ import (
 type Repository interface {
 	AddMarket(*domain.Market) error
 	GetMarket(string) (*domain.Market, bool)
-	GetAvailableMarkets() ([]*domain.Market, error)
+	GetMarkets() ([]*domain.Market, error)
 }
 
 type Service struct {
@@ -37,18 +37,21 @@ func (s *Service) ViewMarkets(ctx context.Context, req *spot_inst_pb.ViewMarkets
 
 	var availableMarkes []*market_pb.Market
 	// получаем доступные маркеты из хранилища
-	available, err := s.markets.GetAvailableMarkets()
+	markets, err := s.markets.GetMarkets()
 	if err != nil {
 		logger.Log.Error("Error getting markets from repository", zap.Error(err))
 		return nil, status.Errorf(codes.Internal, "failed to check markets: %v", err)
 	}
 
 	// преобразуем domain.Market в pb.Market
-	for _, mrkt := range available {
-		availableMarkes = append(
-			availableMarkes,
-			MarketToProto(mrkt),
-		)
+	for _, mrkt := range markets {
+		// выдаем только те, которые доступны и не удалены
+		if mrkt.Enabled && mrkt.DeletedAt == nil {
+			availableMarkes = append(
+				availableMarkes,
+				MarketToProto(mrkt),
+			)
+		}
 	}
 
 	// отправляем результат

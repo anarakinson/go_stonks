@@ -84,6 +84,8 @@ func (c *Client) HandleUserInput() error {
 
 		// -------------------------------------- //
 		// Подписываемся на обновления по созданному заказу
+		// здесь можно запустить горутину, чтобы она параллельно с основным процессом ждала результат
+		// а потом выводила, когда будет готова.
 		fmt.Println("\n\nWaiting for order processing done")
 		stream, err := c.gclient.StreamOrderUpdates(context.Background(), &pb.GetOrderStatusRequest{
 			UserId:  userID,

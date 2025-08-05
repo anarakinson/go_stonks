@@ -15,12 +15,10 @@ func (r *Repository) GetMarket(marketID string) (*domain.Market, bool) {
 	return v, ok
 }
 
-func (r *Repository) GetAvailableMarkets() ([]*domain.Market, error) {
-	var available []*domain.Market
+func (r *Repository) GetMarkets() ([]*domain.Market, error) {
+	var markets []*domain.Market
 	for _, mrkt := range r.markets {
-		if mrkt.Enabled && mrkt.DeletedAt == nil {
-			available = append(available, mrkt)
-		}
+		markets = append(markets, mrkt)
 	}
-	return available, nil
+	return markets, nil
 }
