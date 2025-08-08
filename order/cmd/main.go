@@ -2,12 +2,16 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"log/slog"
 	"os"
+	"strconv"
+	"time"
 
 	"github.com/anarakinson/go_stonks/order/internal/repository/inmemory"
 	"github.com/anarakinson/go_stonks/order/internal/server"
+	"github.com/redis/go-redis/v9"
 
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"github.com/anarakinson/go_stonks_shared/pkg/metrics"
@@ -45,7 +49,8 @@ func main() {
 
 	//--------------------------------------------//
 	// инициализация трейсинга jaegar
-	tp, err := tracing.InitTracerProvider("jaeger:4317", "order-service", "1.0.0", "development", nil)
+	jaegarAddr := fmt.Sprintf("%s:%s", os.Getenv("JAEGER_HOST"), os.Getenv("JAEGER_PORT"))
+	tp, err := tracing.InitTracerProvider(jaegarAddr, "order-service", "1.0.0", "development", nil)
 	if err != nil {
 		log.Fatalf("Failed to init tracer: %v", err)
 	}
@@ -56,12 +61,63 @@ func main() {
 	}()
 
 	//--------------------------------------------//
+	// создаем клиент редиса
+	redisAddr := os.Getenv("REDIS_ADDRESS")
+	redisPass := os.Getenv("REDIS_PASSWORD")
+	redisDB, err := strconv.Atoi(os.Getenv("REDIS_DB"))
+	if err != nil {
+		slog.Error("Error loading REDIS_DB env variable", "error", err)
+		return
+	}
+
+	redisClient := redis.NewClient(
+		&redis.Options{
+			Addr:     redisAddr,
+			Password: redisPass,
+			DB:       redisDB,
+		},
+	)
+	defer redisClient.Close()
+
+	// пингуем редис с повторными попытками
+	ctx := context.Background()
+	maxAttempts, err := strconv.Atoi(os.Getenv("REDIS_PING_NUM"))
+	if err != nil {
+		maxAttempts = 5
+	}
+	retryDelay := 2 * time.Second
+
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		_, err = redisClient.Ping(ctx).Result()
+		if err == nil {
+			logger.Log.Info("Redis connection successful")
+			break
+		}
+
+		logger.Log.Warn("Redis ping failed",
+			zap.Int("attempt", attempt),
+			zap.Error(err))
+
+		if attempt < maxAttempts {
+			logger.Log.Info("Retrying...", zap.Duration("delay", retryDelay))
+			time.Sleep(retryDelay)
+			// Увеличиваем задержку перед следующей попыткой
+			retryDelay *= 2
+		} else {
+			logger.Log.Fatal("All Redis connection attempts failed", zap.Error(err))
+		}
+	}
+
+	//--------------------------------------------//
 	// создаем хранилище
 	repo := inmemory.NewRepository()
 
 	//--------------------------------------------//
 	// создаем и запускаем сервер
-	serv := server.NewServer(os.Getenv("PORT"), repo)
+	serv := server.NewServer(os.Getenv("PORT"), repo, redisClient)
+	// запускаем пинг редис сервиса каждые 15 секунд
+	go serv.StartRedisMonitor(ctx, 15*time.Second)
+	// запускаем сервер
 	err = serv.Run()
 	if err != nil {
 		logger.Log.Error(

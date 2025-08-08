@@ -2,7 +2,6 @@ package order_service
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
@@ -117,12 +116,12 @@ func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequ
 	order := domain.NewOrder(req.UserId, req.MarketId, req.OrderType, req.Price, req.Quantity)
 	// Создаём канал для обновлений заказа
 	updatesCh := make(chan *order_pb.Order)
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	s.updatesChannels[order.ID] = updatesCh
 	// отправляем ордер на обработку
 	go s.processOrder(order.ID)
 
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	err = s.orders.AddOrder(order)
 	if err != nil {
 		logger.Log.Error("Error adding order to repository", zap.Error(err))
@@ -160,14 +159,12 @@ func (s *Service) GetUserOrders(ctx context.Context, req *order_pb.GetUserOrders
 func (s *Service) StreamOrderUpdates(req *order_pb.GetOrderStatusRequest, stream order_pb.OrderService_StreamOrderUpdatesServer) error {
 	orderID := req.GetOrderId()
 
-	fmt.Println("[!]", orderID)
-
 	s.mu.Lock()
 	updatesCh, exists := s.updatesChannels[orderID]
 	s.mu.Unlock()
 
 	if !exists {
-		logger.Log.Error("Required order does not exists")
+		logger.Log.Error("Required order does not exists", zap.String("order ID", orderID))
 		return status.Errorf(
 			codes.NotFound,
 			"order with ID '%s' does not exist",

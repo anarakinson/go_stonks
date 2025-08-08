@@ -1,11 +1,9 @@
 package server
 
 import (
-	"context"
 	"fmt"
 	"net"
 	"os"
-	"strconv"
 	"time"
 
 	order_service "github.com/anarakinson/go_stonks/order/internal/app/order"
@@ -25,15 +23,18 @@ import (
 )
 
 type Server struct {
-	port string
-	repo order_service.Repository
+	port        string
+	repo        order_service.Repository
+	redisClient *redis.Client
 }
 
-func NewServer(port string, repo order_service.Repository) *Server {
-	return &Server{
-		port: port,
-		repo: repo,
+func NewServer(port string, repo order_service.Repository, redis *redis.Client) *Server {
+	s := &Server{
+		port:        port,
+		repo:        repo,
+		redisClient: redis,
 	}
+	return s
 }
 
 func (s *Server) Run() error {
@@ -45,30 +46,8 @@ func (s *Server) Run() error {
 		return fmt.Errorf("listen failed: %w", err)
 	}
 
-	//--------------------------------------------//
-	// создаем клиент редиса
-	redisAddr := os.Getenv("REDIS_ADDRESS")
-	redisPass := os.Getenv("REDIS_PASSWORD")
-	redisDB, err := strconv.Atoi(os.Getenv("REDIS_DB"))
-	if err != nil {
-		return err
-	}
-	fmt.Println(redisAddr, redisPass, redisDB)
-	redisClient := redis.NewClient(
-		&redis.Options{
-			Addr:     "redis:6379",
-			Password: redisPass,
-			DB:       redisDB,
-		},
-	)
-	// пингуем редис
-	_, err = redisClient.Ping(context.Background()).Result()
-	if err != nil {
-		return fmt.Errorf("redis ping failed: %w", err)
-	}
-
 	// Создаем интерсептор
-	cacheInterceptor := interceptors.NewRedisCacheInterceptor(redisClient)
+	cacheInterceptor := interceptors.NewRedisCacheInterceptor(s.redisClient)
 	err = cacheInterceptor.Subscribe("markets:list", "markets:invalidated")
 	if err != nil {
 		return fmt.Errorf("failed on subscribe: %w", err)

@@ -17,6 +17,7 @@ func (r *Repository) GetOrder(orderID string) (*domain.Order, bool) {
 
 func (r *Repository) GetUserOrders(UserId string) ([]*domain.Order, error) {
 	var out []*domain.Order
+	
 	for _, o := range r.orders {
 		if o.UserID == UserId {
 			out = append(out, o)

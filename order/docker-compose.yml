@@ -16,17 +16,30 @@ services:
     command: /app/entrypoint
     environment:
       - SPOT_INSTRUMENT_ADDR=${SPOT_INSTRUMENT_ADDR}
-      - JAEGER_AGENT_HOST=jaeger
+      # - SPOT_INSTRUMENT_ADDR=spot_instrument:50052
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=4317
       - JAEGER_AGENT_PORT=6831
-      - REDIS_ADDRESS="redis:6379"
+      - REDIS_ADDRESS=redis:6379
       - REDIS_PASSWORD=""
       - REDIS_DB=0
     networks:
-      observability-net:
+      observability_net:
         aliases:
           - order
+      grpc_net:
+        aliases:
+          - order_grpc
+      client_server_net:
+        aliases:
+          - order_csn
 
 networks:
-  observability-net:
+  observability_net:
     external: true
-
+  grpc_net:
+    external: true
+  # сеть для взаимодействия клиента с системой
+  client_server_net:
+    driver: bridge
+    name: client_server_net
