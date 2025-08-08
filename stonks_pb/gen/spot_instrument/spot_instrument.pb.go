@@ -8,9 +8,9 @@ package spot_instrument
 
 import (
 	market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -113,18 +113,36 @@ func (x *ViewMarketsResponse) GetMarkets() []*market.Market {
 	return nil
 }
 
+var file_spot_instrument_spot_instrument_proto_extTypes = []protoimpl.ExtensionInfo{
+	{
+		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
+		ExtensionType: (*uint32)(nil),
+		Field:         54321,
+		Name:          "spot_instrument.max_items",
+		Tag:           "varint,54321,opt,name=max_items",
+		Filename:      "spot_instrument/spot_instrument.proto",
+	},
+}
+
+// Extension fields to descriptorpb.FieldOptions.
+var (
+	// optional uint32 max_items = 54321;
+	E_MaxItems = &file_spot_instrument_spot_instrument_proto_extTypes[0] // Уникальный номер > 50000
+)
+
 var File_spot_instrument_spot_instrument_proto protoreflect.FileDescriptor
 
 const file_spot_instrument_spot_instrument_proto_rawDesc = "" +
 	"\n" +
-	"%spot_instrument/spot_instrument.proto\x12\x0fspot_instrument\x1a\x13market/market.proto\x1a\x17validate/validate.proto\"E\n" +
+	"%spot_instrument/spot_instrument.proto\x12\x0fspot_instrument\x1a\x13market/market.proto\x1a google/protobuf/descriptor.proto\"E\n" +
 	"\x12ViewMarketsRequest\x12/\n" +
 	"\n" +
-	"user_roles\x18\x01 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\"I\n" +
-	"\x13ViewMarketsResponse\x122\n" +
-	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketB\b\xfaB\x05\x92\x01\x02\x10dR\amarkets2q\n" +
+	"user_roles\x18\x01 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\"E\n" +
+	"\x13ViewMarketsResponse\x12.\n" +
+	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketB\x04\x88\xc3\x1adR\amarkets2q\n" +
 	"\x15SpotInstrumentService\x12X\n" +
-	"\vViewMarkets\x12#.spot_instrument.ViewMarketsRequest\x1a$.spot_instrument.ViewMarketsResponseBPZNgithub.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument;spot_instrumentb\x06proto3"
+	"\vViewMarkets\x12#.spot_instrument.ViewMarketsRequest\x1a$.spot_instrument.ViewMarketsResponse:<\n" +
+	"\tmax_items\x12\x1d.google.protobuf.FieldOptions\x18\xb1\xa8\x03 \x01(\rR\bmaxItemsBPZNgithub.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument;spot_instrumentb\x06proto3"
 
 var (
 	file_spot_instrument_spot_instrument_proto_rawDescOnce sync.Once
@@ -140,20 +158,22 @@ func file_spot_instrument_spot_instrument_proto_rawDescGZIP() []byte {
 
 var file_spot_instrument_spot_instrument_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_spot_instrument_spot_instrument_proto_goTypes = []any{
-	(*ViewMarketsRequest)(nil),  // 0: spot_instrument.ViewMarketsRequest
-	(*ViewMarketsResponse)(nil), // 1: spot_instrument.ViewMarketsResponse
-	(market.UserRole)(0),        // 2: market.UserRole
-	(*market.Market)(nil),       // 3: market.Market
+	(*ViewMarketsRequest)(nil),        // 0: spot_instrument.ViewMarketsRequest
+	(*ViewMarketsResponse)(nil),       // 1: spot_instrument.ViewMarketsResponse
+	(market.UserRole)(0),              // 2: market.UserRole
+	(*market.Market)(nil),             // 3: market.Market
+	(*descriptorpb.FieldOptions)(nil), // 4: google.protobuf.FieldOptions
 }
 var file_spot_instrument_spot_instrument_proto_depIdxs = []int32{
 	2, // 0: spot_instrument.ViewMarketsRequest.user_roles:type_name -> market.UserRole
 	3, // 1: spot_instrument.ViewMarketsResponse.markets:type_name -> market.Market
-	0, // 2: spot_instrument.SpotInstrumentService.ViewMarkets:input_type -> spot_instrument.ViewMarketsRequest
-	1, // 3: spot_instrument.SpotInstrumentService.ViewMarkets:output_type -> spot_instrument.ViewMarketsResponse
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
+	4, // 2: spot_instrument.max_items:extendee -> google.protobuf.FieldOptions
+	0, // 3: spot_instrument.SpotInstrumentService.ViewMarkets:input_type -> spot_instrument.ViewMarketsRequest
+	1, // 4: spot_instrument.SpotInstrumentService.ViewMarkets:output_type -> spot_instrument.ViewMarketsResponse
+	4, // [4:5] is the sub-list for method output_type
+	3, // [3:4] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	2, // [2:3] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
 }
 
@@ -169,12 +189,13 @@ func file_spot_instrument_spot_instrument_proto_init() {
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_spot_instrument_spot_instrument_proto_rawDesc), len(file_spot_instrument_spot_instrument_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   2,
-			NumExtensions: 0,
+			NumExtensions: 1,
 			NumServices:   1,
 		},
 		GoTypes:           file_spot_instrument_spot_instrument_proto_goTypes,
 		DependencyIndexes: file_spot_instrument_spot_instrument_proto_depIdxs,
 		MessageInfos:      file_spot_instrument_spot_instrument_proto_msgTypes,
+		ExtensionInfos:    file_spot_instrument_spot_instrument_proto_extTypes,
 	}.Build()
 	File_spot_instrument_spot_instrument_proto = out.File
 	file_spot_instrument_spot_instrument_proto_goTypes = nil

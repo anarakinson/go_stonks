@@ -8,9 +8,9 @@ package order
 
 import (
 	market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
-	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -533,14 +533,31 @@ func (x *GetUserOrdersResponse) GetOrders() []*Order {
 	return nil
 }
 
+var file_order_order_proto_extTypes = []protoimpl.ExtensionInfo{
+	{
+		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
+		ExtensionType: (*uint32)(nil),
+		Field:         50000,
+		Name:          "order.max_length",
+		Tag:           "varint,50000,opt,name=max_length",
+		Filename:      "order/order.proto",
+	},
+}
+
+// Extension fields to descriptorpb.FieldOptions.
+var (
+	// optional uint32 max_length = 50000;
+	E_MaxLength = &file_order_order_proto_extTypes[0] // Уникальный номер для кастомной опции
+)
+
 var File_order_order_proto protoreflect.FileDescriptor
 
 const file_order_order_proto_rawDesc = "" +
 	"\n" +
-	"\x11order/order.proto\x12\x05order\x1a\x13market/market.proto\x1a\x17validate/validate.proto\"\xc0\x01\n" +
+	"\x11order/order.proto\x12\x05order\x1a\x13market/market.proto\x1a google/protobuf/descriptor.proto\"\xbd\x01\n" +
 	"\x05Order\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
-	"\auser_id\x18\x02 \x01(\tB\b\xfaB\x05r\x03\x18\x80\x01R\x06userId\x12\x1b\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1e\n" +
+	"\auser_id\x18\x02 \x01(\tB\x05\x80\xb5\x18\x80\x01R\x06userId\x12\x1b\n" +
 	"\tmarket_id\x18\x03 \x01(\tR\bmarketId\x12\x1d\n" +
 	"\n" +
 	"order_type\x18\x04 \x01(\tR\torderType\x12\x14\n" +
@@ -579,7 +596,9 @@ const file_order_order_proto_rawDesc = "" +
 	"\vCreateOrder\x12\x19.order.CreateOrderRequest\x1a\x1a.order.CreateOrderResponse\x12A\n" +
 	"\n" +
 	"GetMarkets\x12\x18.order.GetMarketsRequest\x1a\x19.order.GetMarketsResponse\x12J\n" +
-	"\rGetUserOrders\x12\x1b.order.GetUserOrdersRequest\x1a\x1c.order.GetUserOrdersResponseB<Z:github.com/anarakinson/go_stonks/stonks_pb/gen/order;orderb\x06proto3"
+	"\rGetUserOrders\x12\x1b.order.GetUserOrdersRequest\x1a\x1c.order.GetUserOrdersResponse:>\n" +
+	"\n" +
+	"max_length\x12\x1d.google.protobuf.FieldOptions\x18І\x03 \x01(\rR\tmaxLengthB<Z:github.com/anarakinson/go_stonks/stonks_pb/gen/order;orderb\x06proto3"
 
 var (
 	file_order_order_proto_rawDescOnce sync.Once
@@ -595,17 +614,18 @@ func file_order_order_proto_rawDescGZIP() []byte {
 
 var file_order_order_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_order_order_proto_goTypes = []any{
-	(*Order)(nil),                  // 0: order.Order
-	(*GetOrderStatusRequest)(nil),  // 1: order.GetOrderStatusRequest
-	(*GetOrderStatusResponse)(nil), // 2: order.GetOrderStatusResponse
-	(*CreateOrderRequest)(nil),     // 3: order.CreateOrderRequest
-	(*CreateOrderResponse)(nil),    // 4: order.CreateOrderResponse
-	(*GetMarketsRequest)(nil),      // 5: order.GetMarketsRequest
-	(*GetMarketsResponse)(nil),     // 6: order.GetMarketsResponse
-	(*GetUserOrdersRequest)(nil),   // 7: order.GetUserOrdersRequest
-	(*GetUserOrdersResponse)(nil),  // 8: order.GetUserOrdersResponse
-	(market.UserRole)(0),           // 9: market.UserRole
-	(*market.Market)(nil),          // 10: market.Market
+	(*Order)(nil),                     // 0: order.Order
+	(*GetOrderStatusRequest)(nil),     // 1: order.GetOrderStatusRequest
+	(*GetOrderStatusResponse)(nil),    // 2: order.GetOrderStatusResponse
+	(*CreateOrderRequest)(nil),        // 3: order.CreateOrderRequest
+	(*CreateOrderResponse)(nil),       // 4: order.CreateOrderResponse
+	(*GetMarketsRequest)(nil),         // 5: order.GetMarketsRequest
+	(*GetMarketsResponse)(nil),        // 6: order.GetMarketsResponse
+	(*GetUserOrdersRequest)(nil),      // 7: order.GetUserOrdersRequest
+	(*GetUserOrdersResponse)(nil),     // 8: order.GetUserOrdersResponse
+	(market.UserRole)(0),              // 9: market.UserRole
+	(*market.Market)(nil),             // 10: market.Market
+	(*descriptorpb.FieldOptions)(nil), // 11: google.protobuf.FieldOptions
 }
 var file_order_order_proto_depIdxs = []int32{
 	0,  // 0: order.GetOrderStatusResponse.order:type_name -> order.Order
@@ -613,20 +633,21 @@ var file_order_order_proto_depIdxs = []int32{
 	9,  // 2: order.GetMarketsRequest.user_roles:type_name -> market.UserRole
 	10, // 3: order.GetMarketsResponse.markets:type_name -> market.Market
 	0,  // 4: order.GetUserOrdersResponse.orders:type_name -> order.Order
-	1,  // 5: order.OrderService.GetOrderStatus:input_type -> order.GetOrderStatusRequest
-	1,  // 6: order.OrderService.StreamOrderUpdates:input_type -> order.GetOrderStatusRequest
-	3,  // 7: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
-	5,  // 8: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
-	7,  // 9: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
-	2,  // 10: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
-	2,  // 11: order.OrderService.StreamOrderUpdates:output_type -> order.GetOrderStatusResponse
-	4,  // 12: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
-	6,  // 13: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
-	8,  // 14: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
-	10, // [10:15] is the sub-list for method output_type
-	5,  // [5:10] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
+	11, // 5: order.max_length:extendee -> google.protobuf.FieldOptions
+	1,  // 6: order.OrderService.GetOrderStatus:input_type -> order.GetOrderStatusRequest
+	1,  // 7: order.OrderService.StreamOrderUpdates:input_type -> order.GetOrderStatusRequest
+	3,  // 8: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
+	5,  // 9: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
+	7,  // 10: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
+	2,  // 11: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
+	2,  // 12: order.OrderService.StreamOrderUpdates:output_type -> order.GetOrderStatusResponse
+	4,  // 13: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
+	6,  // 14: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
+	8,  // 15: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
+	11, // [11:16] is the sub-list for method output_type
+	6,  // [6:11] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	5,  // [5:6] is the sub-list for extension extendee
 	0,  // [0:5] is the sub-list for field type_name
 }
 
@@ -642,12 +663,13 @@ func file_order_order_proto_init() {
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_order_order_proto_rawDesc), len(file_order_order_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   9,
-			NumExtensions: 0,
+			NumExtensions: 1,
 			NumServices:   1,
 		},
 		GoTypes:           file_order_order_proto_goTypes,
 		DependencyIndexes: file_order_order_proto_depIdxs,
 		MessageInfos:      file_order_order_proto_msgTypes,
+		ExtensionInfos:    file_order_order_proto_extTypes,
 	}.Build()
 	File_order_order_proto = out.File
 	file_order_order_proto_goTypes = nil
