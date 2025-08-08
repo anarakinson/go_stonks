@@ -38,7 +38,8 @@ func main() {
 
 	//--------------------------------------------//
 	// инициализация трейсинга jaegar
-	tp, err := tracing.InitTracerProvider("jaeger:4317", "client-service", "1.0.0", "development", nil)
+	jaegarAddr := fmt.Sprintf("%s:%s", os.Getenv("JAEGER_HOST"), os.Getenv("JAEGER_PORT"))
+	tp, err := tracing.InitTracerProvider(jaegarAddr, "client-service", "1.0.0", "development", nil)
 	if err != nil {
 		log.Fatalf("Failed to init tracer: %v", err)
 	}

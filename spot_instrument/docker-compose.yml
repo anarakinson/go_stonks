@@ -15,19 +15,25 @@ services:
       interval: 5s
     command: /app/entrypoint
     environment:
-      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=4317
       - JAEGER_AGENT_PORT=6831
-      - REDIS_ADDRESS="redis:6379"
+      # - REDIS_ADDRESS="redis:6379"
+      - REDIS_ADDRESS=redis:6379
       - REDIS_PASSWORD=""
       - REDIS_DB=0
     networks:
-      observability-net:
+      observability_net:
+        aliases:
+          - spot_instrument
+      grpc_net:
         aliases:
           - spot_instrument
 
 networks:
-  observability-net:
+  observability_net:
     external: true
+  grpc_net:
 
 
 

@@ -12,10 +12,12 @@ import (
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 )
 
-func (h *UserHandler) CreateOrderRequest(order *domain.Order) (*pb.CreateOrderResponse, error) {
+func (h *UserHandler) CreateOrderRequest(order *domain.Order, timeout time.Duration) (*pb.CreateOrderResponse, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
+
+	// добавить проверку отмены или ошибки контекста
 
 	logger.Log.Info("Create order")
 	resp, err := h.client.CreateOrder(ctx, &pb.CreateOrderRequest{
@@ -37,9 +39,9 @@ func (h *UserHandler) CreateOrderRequest(order *domain.Order) (*pb.CreateOrderRe
 
 }
 
-func (h *UserHandler) GetUserOrders(userId string) (*pb.GetUserOrdersResponse, error) {
+func (h *UserHandler) GetUserOrders(userId string, timeout time.Duration) (*pb.GetUserOrdersResponse, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	logger.Log.Info("Get user orders")
@@ -57,9 +59,9 @@ func (h *UserHandler) GetUserOrders(userId string) (*pb.GetUserOrdersResponse, e
 
 }
 
-func (h *UserHandler) GetMarkets(userRole pb_market.UserRole) ([]*pb_market.Market, error) {
+func (h *UserHandler) GetMarkets(userRole pb_market.UserRole, timeout time.Duration) ([]*pb_market.Market, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	logger.Log.Info("Get available markets")

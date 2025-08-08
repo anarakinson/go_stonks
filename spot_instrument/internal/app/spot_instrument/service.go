@@ -17,7 +17,7 @@ import (
 type Repository interface {
 	AddMarket(*domain.Market) error
 	GetMarket(string) (*domain.Market, bool)
-	GetMarkets() ([]*domain.Market, error)
+	GetMarkets() ([]domain.Market, error)
 }
 
 type Service struct {
@@ -49,7 +49,7 @@ func (s *Service) ViewMarkets(ctx context.Context, req *spot_inst_pb.ViewMarkets
 		if mrkt.Enabled && mrkt.DeletedAt == nil {
 			availableMarkes = append(
 				availableMarkes,
-				MarketToProto(mrkt),
+				MarketToProto(&mrkt),
 			)
 		}
 	}

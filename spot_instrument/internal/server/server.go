@@ -5,6 +5,7 @@ import (
 	"net"
 
 	spot_instrument_service "github.com/anarakinson/go_stonks/spot_instrument/internal/app/spot_instrument"
+	"github.com/redis/go-redis/v9"
 
 	"github.com/anarakinson/go_stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
@@ -18,14 +19,16 @@ import (
 )
 
 type Server struct {
-	port string
-	repo spot_instrument_service.Repository
+	port        string
+	repo        spot_instrument_service.Repository
+	redisClient *redis.Client
 }
 
-func NewServer(port string, repo spot_instrument_service.Repository) *Server {
+func NewServer(port string, repo spot_instrument_service.Repository, redisClient *redis.Client) *Server {
 	return &Server{
-		port: port,
-		repo: repo,
+		port:        port,
+		repo:        repo,
+		redisClient: redisClient,
 	}
 }
 
@@ -59,7 +62,7 @@ func (s *Server) Run() error {
 	pb.RegisterSpotInstrumentServiceServer(gs, spotService)
 
 	logger.Log.Info(
-		"Order service started",
+		"Spot instrument service started",
 		zap.String("listening address", fmt.Sprintf("%v", lis.Addr())),
 	)
 

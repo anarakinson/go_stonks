@@ -4,8 +4,9 @@ import "github.com/anarakinson/go_stonks/order/internal/domain"
 
 type Repository interface {
 	AddOrder(*domain.Order) error
+	UpdateOrder(*domain.Order) error
 	GetOrder(string) (*domain.Order, bool)
-	GetUserOrders(UserId string) ([]*domain.Order, error)
+	GetUserOrders(UserId string) ([]domain.Order, error)
 }
 
 // MockRepository - мок репозитория для тестов
@@ -19,20 +20,24 @@ func NewMockRepository() *MockRepository {
 	}
 }
 
-func (m *MockRepository) GetUserOrders(UserId string) ([]*domain.Order, error) {
-	orders := []*domain.Order{}
+func (m *MockRepository) GetUserOrders(UserId string) ([]domain.Order, error) {
+	orders := []domain.Order{}
 	for _, v := range m.orders {
-		orders = append(orders, v)
+		orders = append(orders, *v)
 	}
 	return orders, nil
 }
 
-func (m *MockRepository) GetOrder(id string) (*domain.Order, bool) { 
+func (m *MockRepository) GetOrder(id string) (*domain.Order, bool) {
 	v, ok := m.orders[id]
 	return v, ok
 }
 
 func (m *MockRepository) AddOrder(order *domain.Order) error {
 	m.orders[order.ID] = order
+	return nil
+}
+
+func (m *MockRepository) UpdateOrder(*domain.Order) error {
 	return nil
 }

@@ -1,0 +1,70 @@
+groups:
+- name: redis-alerts
+  rules:
+  # Основная доступность Redis
+  - alert: RedisDown
+    expr: redis_up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Redis unavailable"
+      description: "Redis instance {{ $labels.instance }} unavailable for 1m"
+  
+  # Использование памяти (исправленная версия)
+  - alert: RedisMemoryHigh
+    expr: |
+      # Проверяем что метрики существуют и max_memory > 0
+      redis_memory_max_bytes > 0 
+      and redis_memory_used_bytes > 0 
+      and (redis_memory_used_bytes / redis_memory_max_bytes) > 0.9
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High memory usage Redis"
+      description: |
+        Redis {{ $labels.instance }} use 
+        {{ $value }} byte /
+        {{ $labels.instance }} byte
+  
+  # Отдельный алерт для случая без ограничения памяти
+  - alert: RedisNoMemoryLimit
+    expr: redis_memory_max_bytes == 0
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Redis without memory limit"
+      description: "Instance {{ $labels.instance }} is working without maxmemory limit"
+  
+  # Блокировки клиентов
+  - alert: RedisBlockedClients
+    expr: redis_blocked_clients > 5
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Redis clients blocked"
+      description: "{{ $value }} clients blocked in {{ $labels.instance }}"
+  
+  # Потерянные соединения
+  - alert: RedisRejectedConnections
+    expr: rate(redis_rejected_connections_total[1h]) > 0
+    labels:
+      severity: critical
+    annotations:
+      summary: "Redis rejected connections"
+      description: "{{ $value }} connections rejected by {{ $labels.instance }} in 1 hour"
+  
+  # Ошибки AOF
+  - alert: RedisAOFError
+    expr: redis_aof_last_bgrewrite_status == 0 or redis_aof_last_write_status == 0
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: "AOF Redis Error"
+      description: "AOF error in {{ $labels.instance }}"
+
+

@@ -11,7 +11,7 @@ services:
       - "14268:14268"   # HTTP collector
       - "6831:6831/udp" # UDP receiver
     networks:
-      - observability-net
+      - observability_net
 
 
   # Prometheus 
@@ -24,7 +24,7 @@ services:
       # - ./configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./configs/prometheus:/etc/prometheus  
     networks:
-      - observability-net
+      - observability_net
 
 
   # Alertmanager
@@ -45,7 +45,7 @@ services:
     entrypoint: /alertmanager.sh
     command: /bin/alertmanager --config.file=/etc/alertmanager/alertmanager.yml
     networks:
-      - observability-net
+      - observability_net
 
 
   # Grafana
@@ -63,7 +63,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin123
       - GF_INSTANCE_NAME=my-grafana
     networks:
-      - observability-net
+      - observability_net
 
 
   # Redis
@@ -76,14 +76,43 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    command: 
+      # лимиты памяти
+      - redis-server
+      - --maxmemory 256mb
+      - --maxmemory-policy allkeys-lru
     networks:
-      - observability-net
+      - observability_net
+      - grpc_net
+
+
+  # сбор метрик редиса для прометеуса
+  redis_exporter:
+    image: oliver006/redis_exporter
+    command:
+      - --redis.addr=redis://redis:6379
+      # - --redis.password=""
+    ports:
+      - "9121:9121"
+    depends_on:
+      - redis
+    networks:
+      - observability_net
 
 
 networks:
-  observability-net:
+  # сеть для мониторинга и инфраструктуры
+  observability_net:
     driver: bridge
-    name: observability-net
+    name: observability_net
+  # сеть для общения сервисов между собой
+  grpc_net:
+    driver: bridge
+    name: grpc_net
+  # # соединение клиент-сервер
+  # client_server_net:
+  #   driver: bridge
+  #   name: client_server_net
 
     
 volumes:

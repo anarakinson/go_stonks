@@ -15,8 +15,7 @@ services:
       interval: 5s
     command: /app/entrypoint
     environment:
-      - SPOT_INSTRUMENT_ADDR=${SPOT_INSTRUMENT_ADDR}
-      # - SPOT_INSTRUMENT_ADDR=spot_instrument:50052
+      - SPOT_INSTRUMENT_ADDR=${SPOT_INSTRUMENT_ADDR}  
       - JAEGER_HOST=jaeger
       - JAEGER_PORT=4317
       - JAEGER_AGENT_PORT=6831
@@ -29,10 +28,10 @@ services:
           - order
       grpc_net:
         aliases:
-          - order_grpc
+          - order
       client_server_net:
         aliases:
-          - order_csn
+          - order
 
 networks:
   observability_net:

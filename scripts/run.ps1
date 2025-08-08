@@ -1,27 +1,37 @@
-# Запуск инфраструктуры
-docker-compose -f infrastructure/docker-compose.yml up -d --build
 
-# Ждем готовности инфраструктуры (порт 14268)
-Write-Host "Waiting for infrastructure..."
-while (-not (Test-NetConnection -ComputerName localhost -Port 14268).TcpTestSucceeded) {
-    Start-Sleep -Seconds 1
+# Определяем пути к файлам
+$infra = "infrastructure/docker-compose.yml"
+$services = @(
+    "order/docker-compose.yml",
+    "spot_instrument/docker-compose.yml",
+    "client/docker-compose.yml"
+)
+
+# Запуск инфраструктуры
+docker-compose -f $infra up -d --build
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Infrastructure failed! Cleaning up..." -ForegroundColor Red
+    docker-compose -f $infra down -v
+    exit 1
 }
 
 # Запуск сервисов
-docker-compose -f spot_instrument/docker-compose.yml up -d --build
-docker-compose -f order/docker-compose.yml up -d --build
-# Собираем и запускаем клиент в фоне
-docker-compose -f client/docker-compose.yml up -d --build
-
-Write-Host "All services started!"
-
-# Ждем, пока клиент начнет слушать порт 8080 (или другой признак готовности)
-Write-Host "Waiting for client to be ready (port 8080)..."
-while (-not (Test-NetConnection -ComputerName localhost -Port 8080).TcpTestSucceeded) {
-    Start-Sleep -Seconds 1
+foreach ($service in $services) {
+    docker-compose -f $service up -d --build
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "$service failed! Cleaning up..." -ForegroundColor Red
+        
+        # Остановка всех сервисов
+        foreach ($s in $services) {
+            docker-compose -f $s down -v
+        }
+        
+        # Остановка инфраструктуры
+        docker-compose -f $infra down -v
+        exit 1
+    }
 }
 
-Write-Host "All services started! Launching interactive client..."
-
-# Запускаем интерактивную сессию
+# Запуск интерактивного клиента
 docker-compose -f client/docker-compose.yml run client
+

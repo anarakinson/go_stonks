@@ -5,6 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
+	"strconv"
+	"time"
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
@@ -26,8 +29,15 @@ func (c *Client) HandleUserInput() error {
 	// создаем хендлер пользовательского ввода на основе клиента
 	uHandler := user_handler.NewUserHandler(c.gclient)
 
+	// получаем максимальную длину юзернейма из протобафа
+	maxUserIdLenStr := os.Getenv("MAX_USERNAME_LENGHT")
+	maxUserIdLen, err := strconv.Atoi(maxUserIdLenStr)
+	if err != nil {
+		maxUserIdLen = 128 // символов
+	}
+
 	// Запрашиваем UserId
-	userID, err := uHandler.GetUserID()
+	userID, err := uHandler.GetUserID(maxUserIdLen)
 	if err != nil {
 		if errors.Is(err, user_handler.ErrFinish) {
 			fmt.Println("End")
@@ -50,11 +60,18 @@ func (c *Client) HandleUserInput() error {
 		log.Fatalf("Stdin error: %v", err)
 	}
 
+	// получаем таймаут из переменных окружения
+	timeout_str := os.Getenv("CONNECTION_TIMEOUT")
+	timeout, err := strconv.Atoi(timeout_str)
+	if err != nil {
+		timeout = 5
+	}
+
 	// переходим в бесконечный цикл. получаем данные - отправляем запрос на сервис
 	for {
 
 		// получаем маркеты от внешнего сервиса
-		markets, err := uHandler.GetMarkets(userRole)
+		markets, err := uHandler.GetMarkets(userRole, time.Duration(timeout)*time.Second)
 		if err != nil {
 			fmt.Println("Error get available markets.")
 			return err
@@ -74,7 +91,7 @@ func (c *Client) HandleUserInput() error {
 		// отправляем запрос к сервису
 
 		// создаем заказ на основе введенных данных
-		resp, err := uHandler.CreateOrderRequest(order)
+		resp, err := uHandler.CreateOrderRequest(order, time.Duration(timeout)*time.Second)
 		if err != nil {
 			fmt.Println("Error creating order. Try again")
 			continue
@@ -113,7 +130,7 @@ func (c *Client) HandleUserInput() error {
 		// -------------------------------------- //
 		// получаем список заказов пользователя
 		fmt.Println("\n***\n")
-		respOrders, err := uHandler.GetUserOrders(order.UserID)
+		respOrders, err := uHandler.GetUserOrders(order.UserID, time.Duration(timeout)*time.Second)
 		if err != nil {
 			fmt.Println("Error getting user orders")
 			continue

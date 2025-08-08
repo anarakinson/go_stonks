@@ -3,6 +3,8 @@ package inmemory
 import "github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
 
 func (r *Repository) AddMarket(market *domain.Market) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 	if _, exists := r.markets[market.ID]; exists {
 		return ErrMarketCollision
 	}
@@ -11,14 +13,18 @@ func (r *Repository) AddMarket(market *domain.Market) error {
 }
 
 func (r *Repository) GetMarket(marketID string) (*domain.Market, bool) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 	v, ok := r.markets[marketID]
 	return v, ok
 }
 
-func (r *Repository) GetMarkets() ([]*domain.Market, error) {
-	var markets []*domain.Market
+func (r *Repository) GetMarkets() ([]domain.Market, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	var markets []domain.Market
 	for _, mrkt := range r.markets {
-		markets = append(markets, mrkt)
+		markets = append(markets, *mrkt)
 	}
 	return markets, nil
 }

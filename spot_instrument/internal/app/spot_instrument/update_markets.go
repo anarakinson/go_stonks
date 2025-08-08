@@ -1,17 +1,16 @@
-package server
+package spot_instrument
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/anarakinson/go_stonks/spot_instrument/internal/app/spot_instrument"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
 	"github.com/redis/go-redis/v9"
 )
 
 // функция периодически добавляет и удаляет новый маркет в репозиторий
-func StartUpdatingMarkets(ctx context.Context, repo spot_instrument.Repository, redisClient *redis.Client) {
+func StartUpdatingMarkets(ctx context.Context, repo Repository, redisClient *redis.Client) {
 	ticker := time.NewTicker(60 * time.Second)
 	defer ticker.Stop()
 

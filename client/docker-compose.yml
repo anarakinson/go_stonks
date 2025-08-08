@@ -9,16 +9,27 @@ services:
       - "8080:8080"
     restart: unless-stopped
     environment:
-      - JAEGER_AGENT_HOST=jaeger
+      - TARGET_ADDR=${TARGET_ADDR}
+      # - TARGET_ADDR=order.client_server_net:50051
+      - JAEGER_HOST=jaeger
+      - JAEGER_PORT=4317
       - JAEGER_AGENT_PORT=6831
     stdin_open: true      # Аналог -i
     tty: true             # Аналог -t (без этого не будет интерактивности)
     command: /app/entrypoint
     networks:
-      - observability-net
+      observability_net:
+        aliases: 
+          - client
+      client_server_net:
+        aliases: 
+          - client
 
 networks:
-  observability-net:
+  observability_net:
     external: true
+  client_server_net:
+    external: true
+  
 
 

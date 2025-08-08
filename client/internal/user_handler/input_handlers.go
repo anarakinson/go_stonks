@@ -11,18 +11,29 @@ import (
 	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
 )
 
-func (h *UserHandler) GetUserID() (string, error) {
+func (h *UserHandler) GetUserID(maxUserIdLen int) (string, error) {
 
-	fmt.Print("Enter UserId: ")
-	userId, err := h.reader.ReadString('\n')
-	if err != nil {
-		if err == io.EOF {
-			fmt.Println("\nEnd")
-			return "", ErrFinish
+	var input string
+	var err error
+	for strings.ToLower(input) != "exit" {
+		fmt.Print("Enter UserId: ")
+		input, err = h.reader.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				fmt.Println("\nEnd")
+				return "", ErrFinish
+			}
+			return "", ErrStdin
 		}
-		return "", ErrStdin
+		userId := strings.TrimSpace(input)
+		if userId == "" || len(userId) > maxUserIdLen {
+			fmt.Printf("Lenght of username must be less than %d\n", maxUserIdLen)
+			continue
+		}
+		return userId, nil
 	}
-	return strings.ToLower(strings.TrimSpace(userId)), nil
+	// если цикл прервался - прерываем программу
+	return "", ErrFinish
 }
 
 func (h *UserHandler) GetUserRole() (pb_market.UserRole, error) {

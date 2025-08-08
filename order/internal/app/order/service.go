@@ -18,8 +18,9 @@ import (
 
 type Repository interface {
 	AddOrder(*domain.Order) error
+	UpdateOrder(*domain.Order) error
 	GetOrder(string) (*domain.Order, bool)
-	GetUserOrders(UserId string) ([]*domain.Order, error)
+	GetUserOrders(UserId string) ([]domain.Order, error)
 }
 
 type Service struct {
@@ -136,8 +137,6 @@ func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequ
 func (s *Service) GetUserOrders(ctx context.Context, req *order_pb.GetUserOrdersRequest) (*order_pb.GetUserOrdersResponse, error) {
 
 	// получаем данные из хранилища
-	s.mu.RLock()
-	defer s.mu.RUnlock()
 	orders, err := s.orders.GetUserOrders(req.UserId)
 	// проверяем
 	if err != nil {
@@ -148,7 +147,7 @@ func (s *Service) GetUserOrders(ctx context.Context, req *order_pb.GetUserOrders
 	// преобразуем заказы в прото формат
 	var protoOrders []*order_pb.Order
 	for _, o := range orders {
-		protoOrders = append(protoOrders, OrderToProto(o))
+		protoOrders = append(protoOrders, OrderToProto(&o))
 	}
 
 	// возвращаем респонс
@@ -198,6 +197,10 @@ func (s *Service) processOrder(id string) {
 	}
 	// обновляем статус
 	order.Status = "done"
+	err := s.orders.UpdateOrder(order)
+	if err != nil {
+		logger.Log.Error("Error updating order status in db", zap.Error(err))
+	}
 	// отправляем ордер в канал обработки
 	s.updatesChannels[id] <- OrderToProto(order)
 }

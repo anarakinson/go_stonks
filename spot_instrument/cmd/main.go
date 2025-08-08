@@ -7,7 +7,9 @@ import (
 	"log/slog"
 	"os"
 	"strconv"
+	"time"
 
+	"github.com/anarakinson/go_stonks/spot_instrument/internal/app/spot_instrument"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/repository/inmemory"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/server"
@@ -48,7 +50,8 @@ func main() {
 
 	//--------------------------------------------//
 	// инициализация трейсинга jaegar
-	tp, err := tracing.InitTracerProvider("jaeger:4317", "spot_instrument-service", "1.0.0", "development", nil)
+	jaegarAddr := fmt.Sprintf("%s:%s", os.Getenv("JAEGER_HOST"), os.Getenv("JAEGER_PORT"))
+	tp, err := tracing.InitTracerProvider(jaegarAddr, "spot_instrument-service", "1.0.0", "development", nil)
 	if err != nil {
 		log.Fatalf("Failed to init tracer: %v", err)
 	}
@@ -67,19 +70,43 @@ func main() {
 		slog.Error("Error loading REDIS_DB env variable", "error", err)
 		return
 	}
-	fmt.Println(redisAddr, redisPass, redisDB)
+
 	redisClient := redis.NewClient(
 		&redis.Options{
-			Addr:     "redis:6379",
+			Addr:     redisAddr,
 			Password: redisPass,
 			DB:       redisDB,
 		},
 	)
-	// пингуем редис
-	_, err = redisClient.Ping(context.Background()).Result()
+	defer redisClient.Close()
+
+	// пингуем редис с повторными попытками
+	ctx := context.Background()
+	maxAttempts, err := strconv.Atoi(os.Getenv("REDIS_PING_NUM"))
 	if err != nil {
-		logger.Log.Error("redis ping failed", zap.Error(err))
-		return
+		maxAttempts = 5
+	}
+	retryDelay := 2 * time.Second
+
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		_, err = redisClient.Ping(ctx).Result()
+		if err == nil {
+			logger.Log.Info("Redis connection successful")
+			break
+		}
+
+		logger.Log.Warn("Redis ping failed",
+			zap.Int("attempt", attempt),
+			zap.Error(err))
+
+		if attempt < maxAttempts {
+			logger.Log.Info("Retrying...", zap.Duration("delay", retryDelay))
+			time.Sleep(retryDelay)
+			// Увеличиваем задержку перед следующей попыткой
+			retryDelay *= 2
+		} else {
+			logger.Log.Fatal("All Redis connection attempts failed", zap.Error(err))
+		}
 	}
 
 	//--------------------------------------------//
@@ -96,11 +123,14 @@ func main() {
 	// запускаем фоновое обновление маркетов
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	go server.StartUpdatingMarkets(ctx, repo, redisClient)
+	go spot_instrument.StartUpdatingMarkets(ctx, repo, redisClient)
 
 	//--------------------------------------------//
 	// создаем и запускаем сервер
-	serv := server.NewServer(os.Getenv("PORT"), repo)
+	serv := server.NewServer(os.Getenv("PORT"), repo, redisClient)
+	// запускаем пинг редис сервиса каждые 15 секунд
+	go serv.StartRedisMonitor(ctx, 15*time.Second)
+	// запускаем сервер
 	err = serv.Run()
 	if err != nil {
 		logger.Log.Error(

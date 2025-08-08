@@ -1,6 +1,8 @@
 package mocks
 
-import "github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
+import (
+	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
+)
 
 // MockRepository - мок репозитория для тестов
 type MockRepository struct {
@@ -13,8 +15,12 @@ func NewMockRepository(markets []*domain.Market) *MockRepository {
 	}
 }
 
-func (m *MockRepository) GetMarkets() ([]*domain.Market, error) {
-	return m.markets, nil
+func (m *MockRepository) GetMarkets() ([]domain.Market, error) {
+	markets := make([]domain.Market, 0, len(m.markets))
+	for _, m := range m.markets {
+		markets = append(markets, *m)
+	}
+	return markets, nil
 }
 
 func (m *MockRepository) GetMarket(string) (*domain.Market, bool) { return nil, false }
