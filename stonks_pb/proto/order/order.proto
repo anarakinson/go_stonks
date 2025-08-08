@@ -5,11 +5,12 @@ package order;
 option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/order;order";
 
 import "market/market.proto";
+import "validate/validate.proto";
 
 // Определение сообщения Order (DTO для заказа)
 message Order {
     string id = 1;             // Уникальный ID заказа
-    string user_id = 2;        // ID пользователя-владельца
+    string user_id = 2  [(validate.rules).string = {max_len: 128}];        // ID пользователя-владельца
     string market_id = 3;      // ID рынка (например, "BTC/USD")
     string order_type = 4;     // Тип заказа: "limit", "market" и т.д.
     double price = 5;          // Цена за единицу

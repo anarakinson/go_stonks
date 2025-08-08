@@ -1,7 +1,9 @@
 module github.com/anarakinson/go_stonks/stonks_pb
+
 go 1.24.3
 
 require (
+	github.com/envoyproxy/protoc-gen-validate v1.2.1
 	google.golang.org/grpc v1.74.2
 	google.golang.org/protobuf v1.36.6
 )

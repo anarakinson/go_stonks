@@ -8,6 +8,7 @@ package order
 
 import (
 	market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
+	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -536,10 +537,10 @@ var File_order_order_proto protoreflect.FileDescriptor
 
 const file_order_order_proto_rawDesc = "" +
 	"\n" +
-	"\x11order/order.proto\x12\x05order\x1a\x13market/market.proto\"\xb6\x01\n" +
+	"\x11order/order.proto\x12\x05order\x1a\x13market/market.proto\x1a\x17validate/validate.proto\"\xc0\x01\n" +
 	"\x05Order\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1b\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
+	"\auser_id\x18\x02 \x01(\tB\b\xfaB\x05r\x03\x18\x80\x01R\x06userId\x12\x1b\n" +
 	"\tmarket_id\x18\x03 \x01(\tR\bmarketId\x12\x1d\n" +
 	"\n" +
 	"order_type\x18\x04 \x01(\tR\torderType\x12\x14\n" +

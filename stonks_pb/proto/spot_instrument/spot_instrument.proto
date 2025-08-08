@@ -5,6 +5,7 @@ package spot_instrument;
 option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument;spot_instrument";
 
 import "market/market.proto";
+import "validate/validate.proto";
 
 // Запрос для получения списка рынков
 message ViewMarketsRequest {
@@ -13,7 +14,7 @@ message ViewMarketsRequest {
 
 // Ответ со списком доступных рынков
 message ViewMarketsResponse {
-    repeated market.Market markets = 1;        // Массив рынков
+    repeated market.Market markets = 1 [(validate.rules).repeated = {max_items: 100}];        // Массив рынков
 }
 
 // Сервис для работы с торговыми инструментами

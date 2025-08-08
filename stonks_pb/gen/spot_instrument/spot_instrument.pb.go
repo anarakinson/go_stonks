@@ -8,6 +8,7 @@ package spot_instrument
 
 import (
 	market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
+	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -116,12 +117,12 @@ var File_spot_instrument_spot_instrument_proto protoreflect.FileDescriptor
 
 const file_spot_instrument_spot_instrument_proto_rawDesc = "" +
 	"\n" +
-	"%spot_instrument/spot_instrument.proto\x12\x0fspot_instrument\x1a\x13market/market.proto\"E\n" +
+	"%spot_instrument/spot_instrument.proto\x12\x0fspot_instrument\x1a\x13market/market.proto\x1a\x17validate/validate.proto\"E\n" +
 	"\x12ViewMarketsRequest\x12/\n" +
 	"\n" +
-	"user_roles\x18\x01 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\"?\n" +
-	"\x13ViewMarketsResponse\x12(\n" +
-	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketR\amarkets2q\n" +
+	"user_roles\x18\x01 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\"I\n" +
+	"\x13ViewMarketsResponse\x122\n" +
+	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketB\b\xfaB\x05\x92\x01\x02\x10dR\amarkets2q\n" +
 	"\x15SpotInstrumentService\x12X\n" +
 	"\vViewMarkets\x12#.spot_instrument.ViewMarketsRequest\x1a$.spot_instrument.ViewMarketsResponseBPZNgithub.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument;spot_instrumentb\x06proto3"
 
