@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package spot_instrument;
+package spot_instrument.v1;
 
-option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument;spot_instrument";
+option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument/v1;spot_instrument";
 
-import "market/market.proto";
+import "market/v1/market.proto";
 import "google/protobuf/descriptor.proto";
 
 // Расширяем FieldOptions для добавления своей опции
@@ -14,12 +14,13 @@ extend google.protobuf.FieldOptions {
 
 // Запрос для получения списка рынков
 message ViewMarketsRequest {
-    market.UserRole user_roles = 1;     // Роли пользователя для проверки доступа
+    market.v1.UserRole user_roles = 1;     // Роли пользователя для проверки доступа
+    int32 page = 2;
 }
 
 // Ответ со списком доступных рынков
 message ViewMarketsResponse {
-    repeated market.Market markets = 1 [(max_items) = 100];        // Массив рынков
+    repeated market.v1.Market markets = 1 [(max_items) = 10];        // Массив рынков
 }
 
 // Сервис для работы с торговыми инструментами

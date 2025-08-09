@@ -2,12 +2,12 @@
 // versions:
 // 	protoc-gen-go v1.36.6-devel
 // 	protoc        v4.25.1
-// source: order/order.proto
+// source: order/v1/order.proto
 
 package order
 
 import (
-	market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
+	v1 "github.com/anarakinson/go_stonks/stonks_pb/gen/market/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
@@ -39,7 +39,7 @@ type Order struct {
 
 func (x *Order) Reset() {
 	*x = Order{}
-	mi := &file_order_order_proto_msgTypes[0]
+	mi := &file_order_v1_order_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -51,7 +51,7 @@ func (x *Order) String() string {
 func (*Order) ProtoMessage() {}
 
 func (x *Order) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[0]
+	mi := &file_order_v1_order_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -64,7 +64,7 @@ func (x *Order) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Order.ProtoReflect.Descriptor instead.
 func (*Order) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{0}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Order) GetId() string {
@@ -127,7 +127,7 @@ type GetOrderStatusRequest struct {
 
 func (x *GetOrderStatusRequest) Reset() {
 	*x = GetOrderStatusRequest{}
-	mi := &file_order_order_proto_msgTypes[1]
+	mi := &file_order_v1_order_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -139,7 +139,7 @@ func (x *GetOrderStatusRequest) String() string {
 func (*GetOrderStatusRequest) ProtoMessage() {}
 
 func (x *GetOrderStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[1]
+	mi := &file_order_v1_order_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -152,7 +152,7 @@ func (x *GetOrderStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrderStatusRequest.ProtoReflect.Descriptor instead.
 func (*GetOrderStatusRequest) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{1}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GetOrderStatusRequest) GetOrderId() string {
@@ -180,7 +180,7 @@ type GetOrderStatusResponse struct {
 
 func (x *GetOrderStatusResponse) Reset() {
 	*x = GetOrderStatusResponse{}
-	mi := &file_order_order_proto_msgTypes[2]
+	mi := &file_order_v1_order_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -192,7 +192,7 @@ func (x *GetOrderStatusResponse) String() string {
 func (*GetOrderStatusResponse) ProtoMessage() {}
 
 func (x *GetOrderStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[2]
+	mi := &file_order_v1_order_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -205,7 +205,7 @@ func (x *GetOrderStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrderStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetOrderStatusResponse) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{2}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetOrderStatusResponse) GetOrder() *Order {
@@ -218,19 +218,19 @@ func (x *GetOrderStatusResponse) GetOrder() *Order {
 // Запрос на создание заказа
 type CreateOrderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                // ID пользователя
-	MarketId      string                 `protobuf:"bytes,2,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`                          // ID рынка
-	OrderType     string                 `protobuf:"bytes,3,opt,name=order_type,json=orderType,proto3" json:"order_type,omitempty"`                       // Тип заказа
-	Price         float64                `protobuf:"fixed64,4,opt,name=price,proto3" json:"price,omitempty"`                                              // Цена
-	Quantity      float64                `protobuf:"fixed64,5,opt,name=quantity,proto3" json:"quantity,omitempty"`                                        // Количество
-	UserRoles     market.UserRole        `protobuf:"varint,6,opt,name=user_roles,json=userRoles,proto3,enum=market.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                   // ID пользователя
+	MarketId      string                 `protobuf:"bytes,2,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`                             // ID рынка
+	OrderType     string                 `protobuf:"bytes,3,opt,name=order_type,json=orderType,proto3" json:"order_type,omitempty"`                          // Тип заказа
+	Price         float64                `protobuf:"fixed64,4,opt,name=price,proto3" json:"price,omitempty"`                                                 // Цена
+	Quantity      float64                `protobuf:"fixed64,5,opt,name=quantity,proto3" json:"quantity,omitempty"`                                           // Количество
+	UserRoles     v1.UserRole            `protobuf:"varint,6,opt,name=user_roles,json=userRoles,proto3,enum=market.v1.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateOrderRequest) Reset() {
 	*x = CreateOrderRequest{}
-	mi := &file_order_order_proto_msgTypes[3]
+	mi := &file_order_v1_order_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -242,7 +242,7 @@ func (x *CreateOrderRequest) String() string {
 func (*CreateOrderRequest) ProtoMessage() {}
 
 func (x *CreateOrderRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[3]
+	mi := &file_order_v1_order_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -255,7 +255,7 @@ func (x *CreateOrderRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrderRequest.ProtoReflect.Descriptor instead.
 func (*CreateOrderRequest) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{3}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateOrderRequest) GetUserId() string {
@@ -293,11 +293,11 @@ func (x *CreateOrderRequest) GetQuantity() float64 {
 	return 0
 }
 
-func (x *CreateOrderRequest) GetUserRoles() market.UserRole {
+func (x *CreateOrderRequest) GetUserRoles() v1.UserRole {
 	if x != nil {
 		return x.UserRoles
 	}
-	return market.UserRole(0)
+	return v1.UserRole(0)
 }
 
 // Ответ после создания заказа
@@ -311,7 +311,7 @@ type CreateOrderResponse struct {
 
 func (x *CreateOrderResponse) Reset() {
 	*x = CreateOrderResponse{}
-	mi := &file_order_order_proto_msgTypes[4]
+	mi := &file_order_v1_order_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -323,7 +323,7 @@ func (x *CreateOrderResponse) String() string {
 func (*CreateOrderResponse) ProtoMessage() {}
 
 func (x *CreateOrderResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[4]
+	mi := &file_order_v1_order_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -336,7 +336,7 @@ func (x *CreateOrderResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrderResponse.ProtoReflect.Descriptor instead.
 func (*CreateOrderResponse) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{4}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateOrderResponse) GetOrderId() string {
@@ -356,14 +356,15 @@ func (x *CreateOrderResponse) GetStatus() string {
 // Запрос списка доступных рынков
 type GetMarketsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserRoles     market.UserRole        `protobuf:"varint,1,opt,name=user_roles,json=userRoles,proto3,enum=market.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
+	UserRoles     v1.UserRole            `protobuf:"varint,1,opt,name=user_roles,json=userRoles,proto3,enum=market.v1.UserRole" json:"user_roles,omitempty"` // Роли пользователя для проверки доступа
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetMarketsRequest) Reset() {
 	*x = GetMarketsRequest{}
-	mi := &file_order_order_proto_msgTypes[5]
+	mi := &file_order_v1_order_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -375,7 +376,7 @@ func (x *GetMarketsRequest) String() string {
 func (*GetMarketsRequest) ProtoMessage() {}
 
 func (x *GetMarketsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[5]
+	mi := &file_order_v1_order_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -388,27 +389,34 @@ func (x *GetMarketsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMarketsRequest.ProtoReflect.Descriptor instead.
 func (*GetMarketsRequest) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{5}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GetMarketsRequest) GetUserRoles() market.UserRole {
+func (x *GetMarketsRequest) GetUserRoles() v1.UserRole {
 	if x != nil {
 		return x.UserRoles
 	}
-	return market.UserRole(0)
+	return v1.UserRole(0)
+}
+
+func (x *GetMarketsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
 }
 
 // Ответ со списком доступных рынков
 type GetMarketsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Markets       []*market.Market       `protobuf:"bytes,1,rep,name=markets,proto3" json:"markets,omitempty"` // список доступных рынков
+	Markets       []*v1.Market           `protobuf:"bytes,1,rep,name=markets,proto3" json:"markets,omitempty"` // список доступных рынков
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetMarketsResponse) Reset() {
 	*x = GetMarketsResponse{}
-	mi := &file_order_order_proto_msgTypes[6]
+	mi := &file_order_v1_order_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -420,7 +428,7 @@ func (x *GetMarketsResponse) String() string {
 func (*GetMarketsResponse) ProtoMessage() {}
 
 func (x *GetMarketsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[6]
+	mi := &file_order_v1_order_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -433,10 +441,10 @@ func (x *GetMarketsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMarketsResponse.ProtoReflect.Descriptor instead.
 func (*GetMarketsResponse) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{6}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GetMarketsResponse) GetMarkets() []*market.Market {
+func (x *GetMarketsResponse) GetMarkets() []*v1.Market {
 	if x != nil {
 		return x.Markets
 	}
@@ -453,7 +461,7 @@ type GetUserOrdersRequest struct {
 
 func (x *GetUserOrdersRequest) Reset() {
 	*x = GetUserOrdersRequest{}
-	mi := &file_order_order_proto_msgTypes[7]
+	mi := &file_order_v1_order_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -465,7 +473,7 @@ func (x *GetUserOrdersRequest) String() string {
 func (*GetUserOrdersRequest) ProtoMessage() {}
 
 func (x *GetUserOrdersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[7]
+	mi := &file_order_v1_order_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -478,7 +486,7 @@ func (x *GetUserOrdersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserOrdersRequest.ProtoReflect.Descriptor instead.
 func (*GetUserOrdersRequest) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{7}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetUserOrdersRequest) GetUserId() string {
@@ -498,7 +506,7 @@ type GetUserOrdersResponse struct {
 
 func (x *GetUserOrdersResponse) Reset() {
 	*x = GetUserOrdersResponse{}
-	mi := &file_order_order_proto_msgTypes[8]
+	mi := &file_order_v1_order_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -510,7 +518,7 @@ func (x *GetUserOrdersResponse) String() string {
 func (*GetUserOrdersResponse) ProtoMessage() {}
 
 func (x *GetUserOrdersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_order_order_proto_msgTypes[8]
+	mi := &file_order_v1_order_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -523,7 +531,7 @@ func (x *GetUserOrdersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserOrdersResponse.ProtoReflect.Descriptor instead.
 func (*GetUserOrdersResponse) Descriptor() ([]byte, []int) {
-	return file_order_order_proto_rawDescGZIP(), []int{8}
+	return file_order_v1_order_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetUserOrdersResponse) GetOrders() []*Order {
@@ -533,28 +541,28 @@ func (x *GetUserOrdersResponse) GetOrders() []*Order {
 	return nil
 }
 
-var file_order_order_proto_extTypes = []protoimpl.ExtensionInfo{
+var file_order_v1_order_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
 		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
 		ExtensionType: (*uint32)(nil),
 		Field:         50000,
-		Name:          "order.max_length",
+		Name:          "order.v1.max_length",
 		Tag:           "varint,50000,opt,name=max_length",
-		Filename:      "order/order.proto",
+		Filename:      "order/v1/order.proto",
 	},
 }
 
 // Extension fields to descriptorpb.FieldOptions.
 var (
 	// optional uint32 max_length = 50000;
-	E_MaxLength = &file_order_order_proto_extTypes[0] // Уникальный номер для кастомной опции
+	E_MaxLength = &file_order_v1_order_proto_extTypes[0] // Уникальный номер для кастомной опции
 )
 
-var File_order_order_proto protoreflect.FileDescriptor
+var File_order_v1_order_proto protoreflect.FileDescriptor
 
-const file_order_order_proto_rawDesc = "" +
+const file_order_v1_order_proto_rawDesc = "" +
 	"\n" +
-	"\x11order/order.proto\x12\x05order\x1a\x13market/market.proto\x1a google/protobuf/descriptor.proto\"\xbd\x01\n" +
+	"\x14order/v1/order.proto\x12\border.v1\x1a\x16market/v1/market.proto\x1a google/protobuf/descriptor.proto\"\xbd\x01\n" +
 	"\x05Order\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1e\n" +
 	"\auser_id\x18\x02 \x01(\tB\x05\x80\xb5\x18\x80\x01R\x06userId\x12\x1b\n" +
@@ -566,84 +574,85 @@ const file_order_order_proto_rawDesc = "" +
 	"\x06status\x18\a \x01(\tR\x06status\"K\n" +
 	"\x15GetOrderStatusRequest\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\"<\n" +
-	"\x16GetOrderStatusResponse\x12\"\n" +
-	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order\"\xcc\x01\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"?\n" +
+	"\x16GetOrderStatusResponse\x12%\n" +
+	"\x05order\x18\x01 \x01(\v2\x0f.order.v1.OrderR\x05order\"\xcf\x01\n" +
 	"\x12CreateOrderRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
 	"\tmarket_id\x18\x02 \x01(\tR\bmarketId\x12\x1d\n" +
 	"\n" +
 	"order_type\x18\x03 \x01(\tR\torderType\x12\x14\n" +
 	"\x05price\x18\x04 \x01(\x01R\x05price\x12\x1a\n" +
-	"\bquantity\x18\x05 \x01(\x01R\bquantity\x12/\n" +
+	"\bquantity\x18\x05 \x01(\x01R\bquantity\x122\n" +
 	"\n" +
-	"user_roles\x18\x06 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\"H\n" +
+	"user_roles\x18\x06 \x01(\x0e2\x13.market.v1.UserRoleR\tuserRoles\"H\n" +
 	"\x13CreateOrderResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\"D\n" +
-	"\x11GetMarketsRequest\x12/\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\"[\n" +
+	"\x11GetMarketsRequest\x122\n" +
 	"\n" +
-	"user_roles\x18\x01 \x01(\x0e2\x10.market.UserRoleR\tuserRoles\">\n" +
-	"\x12GetMarketsResponse\x12(\n" +
-	"\amarkets\x18\x01 \x03(\v2\x0e.market.MarketR\amarkets\"/\n" +
+	"user_roles\x18\x01 \x01(\x0e2\x13.market.v1.UserRoleR\tuserRoles\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\"A\n" +
+	"\x12GetMarketsResponse\x12+\n" +
+	"\amarkets\x18\x01 \x03(\v2\x11.market.v1.MarketR\amarkets\"/\n" +
 	"\x14GetUserOrdersRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"=\n" +
-	"\x15GetUserOrdersResponse\x12$\n" +
-	"\x06orders\x18\x01 \x03(\v2\f.order.OrderR\x06orders2\x87\x03\n" +
-	"\fOrderService\x12M\n" +
-	"\x0eGetOrderStatus\x12\x1c.order.GetOrderStatusRequest\x1a\x1d.order.GetOrderStatusResponse\x12S\n" +
-	"\x12StreamOrderUpdates\x12\x1c.order.GetOrderStatusRequest\x1a\x1d.order.GetOrderStatusResponse0\x01\x12D\n" +
-	"\vCreateOrder\x12\x19.order.CreateOrderRequest\x1a\x1a.order.CreateOrderResponse\x12A\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"@\n" +
+	"\x15GetUserOrdersResponse\x12'\n" +
+	"\x06orders\x18\x01 \x03(\v2\x0f.order.v1.OrderR\x06orders2\xa5\x03\n" +
+	"\fOrderService\x12S\n" +
+	"\x0eGetOrderStatus\x12\x1f.order.v1.GetOrderStatusRequest\x1a .order.v1.GetOrderStatusResponse\x12Y\n" +
+	"\x12StreamOrderUpdates\x12\x1f.order.v1.GetOrderStatusRequest\x1a .order.v1.GetOrderStatusResponse0\x01\x12J\n" +
+	"\vCreateOrder\x12\x1c.order.v1.CreateOrderRequest\x1a\x1d.order.v1.CreateOrderResponse\x12G\n" +
 	"\n" +
-	"GetMarkets\x12\x18.order.GetMarketsRequest\x1a\x19.order.GetMarketsResponse\x12J\n" +
-	"\rGetUserOrders\x12\x1b.order.GetUserOrdersRequest\x1a\x1c.order.GetUserOrdersResponse:>\n" +
+	"GetMarkets\x12\x1b.order.v1.GetMarketsRequest\x1a\x1c.order.v1.GetMarketsResponse\x12P\n" +
+	"\rGetUserOrders\x12\x1e.order.v1.GetUserOrdersRequest\x1a\x1f.order.v1.GetUserOrdersResponse:>\n" +
 	"\n" +
-	"max_length\x12\x1d.google.protobuf.FieldOptions\x18І\x03 \x01(\rR\tmaxLengthB<Z:github.com/anarakinson/go_stonks/stonks_pb/gen/order;orderb\x06proto3"
+	"max_length\x12\x1d.google.protobuf.FieldOptions\x18І\x03 \x01(\rR\tmaxLengthB?Z=github.com/anarakinson/go_stonks/stonks_pb/gen/order/v1;orderb\x06proto3"
 
 var (
-	file_order_order_proto_rawDescOnce sync.Once
-	file_order_order_proto_rawDescData []byte
+	file_order_v1_order_proto_rawDescOnce sync.Once
+	file_order_v1_order_proto_rawDescData []byte
 )
 
-func file_order_order_proto_rawDescGZIP() []byte {
-	file_order_order_proto_rawDescOnce.Do(func() {
-		file_order_order_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_order_order_proto_rawDesc), len(file_order_order_proto_rawDesc)))
+func file_order_v1_order_proto_rawDescGZIP() []byte {
+	file_order_v1_order_proto_rawDescOnce.Do(func() {
+		file_order_v1_order_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_order_v1_order_proto_rawDesc), len(file_order_v1_order_proto_rawDesc)))
 	})
-	return file_order_order_proto_rawDescData
+	return file_order_v1_order_proto_rawDescData
 }
 
-var file_order_order_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_order_order_proto_goTypes = []any{
-	(*Order)(nil),                     // 0: order.Order
-	(*GetOrderStatusRequest)(nil),     // 1: order.GetOrderStatusRequest
-	(*GetOrderStatusResponse)(nil),    // 2: order.GetOrderStatusResponse
-	(*CreateOrderRequest)(nil),        // 3: order.CreateOrderRequest
-	(*CreateOrderResponse)(nil),       // 4: order.CreateOrderResponse
-	(*GetMarketsRequest)(nil),         // 5: order.GetMarketsRequest
-	(*GetMarketsResponse)(nil),        // 6: order.GetMarketsResponse
-	(*GetUserOrdersRequest)(nil),      // 7: order.GetUserOrdersRequest
-	(*GetUserOrdersResponse)(nil),     // 8: order.GetUserOrdersResponse
-	(market.UserRole)(0),              // 9: market.UserRole
-	(*market.Market)(nil),             // 10: market.Market
+var file_order_v1_order_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_order_v1_order_proto_goTypes = []any{
+	(*Order)(nil),                     // 0: order.v1.Order
+	(*GetOrderStatusRequest)(nil),     // 1: order.v1.GetOrderStatusRequest
+	(*GetOrderStatusResponse)(nil),    // 2: order.v1.GetOrderStatusResponse
+	(*CreateOrderRequest)(nil),        // 3: order.v1.CreateOrderRequest
+	(*CreateOrderResponse)(nil),       // 4: order.v1.CreateOrderResponse
+	(*GetMarketsRequest)(nil),         // 5: order.v1.GetMarketsRequest
+	(*GetMarketsResponse)(nil),        // 6: order.v1.GetMarketsResponse
+	(*GetUserOrdersRequest)(nil),      // 7: order.v1.GetUserOrdersRequest
+	(*GetUserOrdersResponse)(nil),     // 8: order.v1.GetUserOrdersResponse
+	(v1.UserRole)(0),                  // 9: market.v1.UserRole
+	(*v1.Market)(nil),                 // 10: market.v1.Market
 	(*descriptorpb.FieldOptions)(nil), // 11: google.protobuf.FieldOptions
 }
-var file_order_order_proto_depIdxs = []int32{
-	0,  // 0: order.GetOrderStatusResponse.order:type_name -> order.Order
-	9,  // 1: order.CreateOrderRequest.user_roles:type_name -> market.UserRole
-	9,  // 2: order.GetMarketsRequest.user_roles:type_name -> market.UserRole
-	10, // 3: order.GetMarketsResponse.markets:type_name -> market.Market
-	0,  // 4: order.GetUserOrdersResponse.orders:type_name -> order.Order
-	11, // 5: order.max_length:extendee -> google.protobuf.FieldOptions
-	1,  // 6: order.OrderService.GetOrderStatus:input_type -> order.GetOrderStatusRequest
-	1,  // 7: order.OrderService.StreamOrderUpdates:input_type -> order.GetOrderStatusRequest
-	3,  // 8: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
-	5,  // 9: order.OrderService.GetMarkets:input_type -> order.GetMarketsRequest
-	7,  // 10: order.OrderService.GetUserOrders:input_type -> order.GetUserOrdersRequest
-	2,  // 11: order.OrderService.GetOrderStatus:output_type -> order.GetOrderStatusResponse
-	2,  // 12: order.OrderService.StreamOrderUpdates:output_type -> order.GetOrderStatusResponse
-	4,  // 13: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
-	6,  // 14: order.OrderService.GetMarkets:output_type -> order.GetMarketsResponse
-	8,  // 15: order.OrderService.GetUserOrders:output_type -> order.GetUserOrdersResponse
+var file_order_v1_order_proto_depIdxs = []int32{
+	0,  // 0: order.v1.GetOrderStatusResponse.order:type_name -> order.v1.Order
+	9,  // 1: order.v1.CreateOrderRequest.user_roles:type_name -> market.v1.UserRole
+	9,  // 2: order.v1.GetMarketsRequest.user_roles:type_name -> market.v1.UserRole
+	10, // 3: order.v1.GetMarketsResponse.markets:type_name -> market.v1.Market
+	0,  // 4: order.v1.GetUserOrdersResponse.orders:type_name -> order.v1.Order
+	11, // 5: order.v1.max_length:extendee -> google.protobuf.FieldOptions
+	1,  // 6: order.v1.OrderService.GetOrderStatus:input_type -> order.v1.GetOrderStatusRequest
+	1,  // 7: order.v1.OrderService.StreamOrderUpdates:input_type -> order.v1.GetOrderStatusRequest
+	3,  // 8: order.v1.OrderService.CreateOrder:input_type -> order.v1.CreateOrderRequest
+	5,  // 9: order.v1.OrderService.GetMarkets:input_type -> order.v1.GetMarketsRequest
+	7,  // 10: order.v1.OrderService.GetUserOrders:input_type -> order.v1.GetUserOrdersRequest
+	2,  // 11: order.v1.OrderService.GetOrderStatus:output_type -> order.v1.GetOrderStatusResponse
+	2,  // 12: order.v1.OrderService.StreamOrderUpdates:output_type -> order.v1.GetOrderStatusResponse
+	4,  // 13: order.v1.OrderService.CreateOrder:output_type -> order.v1.CreateOrderResponse
+	6,  // 14: order.v1.OrderService.GetMarkets:output_type -> order.v1.GetMarketsResponse
+	8,  // 15: order.v1.OrderService.GetUserOrders:output_type -> order.v1.GetUserOrdersResponse
 	11, // [11:16] is the sub-list for method output_type
 	6,  // [6:11] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
@@ -651,27 +660,27 @@ var file_order_order_proto_depIdxs = []int32{
 	0,  // [0:5] is the sub-list for field type_name
 }
 
-func init() { file_order_order_proto_init() }
-func file_order_order_proto_init() {
-	if File_order_order_proto != nil {
+func init() { file_order_v1_order_proto_init() }
+func file_order_v1_order_proto_init() {
+	if File_order_v1_order_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_order_order_proto_rawDesc), len(file_order_order_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_order_v1_order_proto_rawDesc), len(file_order_v1_order_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   9,
 			NumExtensions: 1,
 			NumServices:   1,
 		},
-		GoTypes:           file_order_order_proto_goTypes,
-		DependencyIndexes: file_order_order_proto_depIdxs,
-		MessageInfos:      file_order_order_proto_msgTypes,
-		ExtensionInfos:    file_order_order_proto_extTypes,
+		GoTypes:           file_order_v1_order_proto_goTypes,
+		DependencyIndexes: file_order_v1_order_proto_depIdxs,
+		MessageInfos:      file_order_v1_order_proto_msgTypes,
+		ExtensionInfos:    file_order_v1_order_proto_extTypes,
 	}.Build()
-	File_order_order_proto = out.File
-	file_order_order_proto_goTypes = nil
-	file_order_order_proto_depIdxs = nil
+	File_order_v1_order_proto = out.File
+	file_order_v1_order_proto_goTypes = nil
+	file_order_v1_order_proto_depIdxs = nil
 }

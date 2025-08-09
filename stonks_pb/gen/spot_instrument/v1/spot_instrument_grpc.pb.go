@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v4.25.1
-// source: spot_instrument/spot_instrument.proto
+// source: spot_instrument/v1/spot_instrument.proto
 
 package spot_instrument
 
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SpotInstrumentService_ViewMarkets_FullMethodName = "/spot_instrument.SpotInstrumentService/ViewMarkets"
+	SpotInstrumentService_ViewMarkets_FullMethodName = "/spot_instrument.v1.SpotInstrumentService/ViewMarkets"
 )
 
 // SpotInstrumentServiceClient is the client API for SpotInstrumentService service.
@@ -114,7 +114,7 @@ func _SpotInstrumentService_ViewMarkets_Handler(srv interface{}, ctx context.Con
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SpotInstrumentService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "spot_instrument.SpotInstrumentService",
+	ServiceName: "spot_instrument.v1.SpotInstrumentService",
 	HandlerType: (*SpotInstrumentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -123,5 +123,5 @@ var SpotInstrumentService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "spot_instrument/spot_instrument.proto",
+	Metadata: "spot_instrument/v1/spot_instrument.proto",
 }

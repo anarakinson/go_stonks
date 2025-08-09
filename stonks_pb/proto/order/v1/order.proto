@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package order;
+package order.v1;
 
-option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/order;order";
+option go_package = "github.com/anarakinson/go_stonks/stonks_pb/gen/order/v1;order";
 
-import "market/market.proto";
+import "market/v1/market.proto";
 import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.FieldOptions {
@@ -41,7 +41,7 @@ message CreateOrderRequest {
     string order_type = 3;          // Тип заказа
     double price = 4;               // Цена
     double quantity = 5;            // Количество
-    market.UserRole user_roles = 6; // Роли пользователя для проверки доступа
+    market.v1.UserRole user_roles = 6; // Роли пользователя для проверки доступа
 }
 
 // Ответ после создания заказа
@@ -52,12 +52,13 @@ message CreateOrderResponse {
 
 // Запрос списка доступных рынков
 message GetMarketsRequest {
-    market.UserRole user_roles = 1;     // Роли пользователя для проверки доступа
+    market.v1.UserRole user_roles = 1;     // Роли пользователя для проверки доступа
+    int32 page = 2;
 }
 
 // Ответ со списком доступных рынков
 message GetMarketsResponse {
-    repeated market.Market markets = 1; // список доступных рынков
+    repeated market.v1.Market markets = 1; // список доступных рынков
 }
 
 // Запрос списка созданных пользователем заказов

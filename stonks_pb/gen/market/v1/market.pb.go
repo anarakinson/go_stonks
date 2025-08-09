@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6-devel
 // 	protoc        v4.25.1
-// source: market/market.proto
+// source: market/v1/market.proto
 
 package market
 
@@ -56,11 +56,11 @@ func (x UserRole) String() string {
 }
 
 func (UserRole) Descriptor() protoreflect.EnumDescriptor {
-	return file_market_market_proto_enumTypes[0].Descriptor()
+	return file_market_v1_market_proto_enumTypes[0].Descriptor()
 }
 
 func (UserRole) Type() protoreflect.EnumType {
-	return &file_market_market_proto_enumTypes[0]
+	return &file_market_v1_market_proto_enumTypes[0]
 }
 
 func (x UserRole) Number() protoreflect.EnumNumber {
@@ -69,24 +69,24 @@ func (x UserRole) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use UserRole.Descriptor instead.
 func (UserRole) EnumDescriptor() ([]byte, []int) {
-	return file_market_market_proto_rawDescGZIP(), []int{0}
+	return file_market_v1_market_proto_rawDescGZIP(), []int{0}
 }
 
 // Определение сообщения Market (DTO для рынка)
 type Market struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                      // Уникальный идентификатор рынка
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                                                  // Название рынка (например, "BTC/USD")
-	Enabled       bool                   `protobuf:"varint,3,opt,name=enabled,proto3" json:"enabled,omitempty"`                                                           // Активен ли рынок для торговли
-	AllowedRoles  []UserRole             `protobuf:"varint,4,rep,packed,name=allowed_roles,json=allowedRoles,proto3,enum=market.UserRole" json:"allowed_roles,omitempty"` // Роли пользователей, которым доступен рынок
-	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                                       // Дата удаления (null если не удален)
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                         // Уникальный идентификатор рынка
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                                                     // Название рынка (например, "BTC/USD")
+	Enabled       bool                   `protobuf:"varint,3,opt,name=enabled,proto3" json:"enabled,omitempty"`                                                              // Активен ли рынок для торговли
+	AllowedRoles  []UserRole             `protobuf:"varint,4,rep,packed,name=allowed_roles,json=allowedRoles,proto3,enum=market.v1.UserRole" json:"allowed_roles,omitempty"` // Роли пользователей, которым доступен рынок
+	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                                          // Дата удаления (null если не удален)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Market) Reset() {
 	*x = Market{}
-	mi := &file_market_market_proto_msgTypes[0]
+	mi := &file_market_v1_market_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -98,7 +98,7 @@ func (x *Market) String() string {
 func (*Market) ProtoMessage() {}
 
 func (x *Market) ProtoReflect() protoreflect.Message {
-	mi := &file_market_market_proto_msgTypes[0]
+	mi := &file_market_v1_market_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -111,7 +111,7 @@ func (x *Market) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Market.ProtoReflect.Descriptor instead.
 func (*Market) Descriptor() ([]byte, []int) {
-	return file_market_market_proto_rawDescGZIP(), []int{0}
+	return file_market_v1_market_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Market) GetId() string {
@@ -149,16 +149,16 @@ func (x *Market) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-var File_market_market_proto protoreflect.FileDescriptor
+var File_market_v1_market_proto protoreflect.FileDescriptor
 
-const file_market_market_proto_rawDesc = "" +
+const file_market_v1_market_proto_rawDesc = "" +
 	"\n" +
-	"\x13market/market.proto\x12\x06market\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb8\x01\n" +
+	"\x16market/v1/market.proto\x12\tmarket.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbb\x01\n" +
 	"\x06Market\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
-	"\aenabled\x18\x03 \x01(\bR\aenabled\x125\n" +
-	"\rallowed_roles\x18\x04 \x03(\x0e2\x10.market.UserRoleR\fallowedRoles\x129\n" +
+	"\aenabled\x18\x03 \x01(\bR\aenabled\x128\n" +
+	"\rallowed_roles\x18\x04 \x03(\x0e2\x13.market.v1.UserRoleR\fallowedRoles\x129\n" +
 	"\n" +
 	"deleted_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt*A\n" +
 	"\bUserRole\x12\x0e\n" +
@@ -166,30 +166,30 @@ const file_market_market_proto_rawDesc = "" +
 	"ROLE_BASIC\x10\x00\x12\x15\n" +
 	"\x11ROLE_PROFESSIONAL\x10\x01\x12\x0e\n" +
 	"\n" +
-	"ROLE_WHALE\x10\x02B>Z<github.com/anarakinson/go_stonks/stonks_pb/gen/market;marketb\x06proto3"
+	"ROLE_WHALE\x10\x02BAZ?github.com/anarakinson/go_stonks/stonks_pb/gen/market/v1;marketb\x06proto3"
 
 var (
-	file_market_market_proto_rawDescOnce sync.Once
-	file_market_market_proto_rawDescData []byte
+	file_market_v1_market_proto_rawDescOnce sync.Once
+	file_market_v1_market_proto_rawDescData []byte
 )
 
-func file_market_market_proto_rawDescGZIP() []byte {
-	file_market_market_proto_rawDescOnce.Do(func() {
-		file_market_market_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_market_market_proto_rawDesc), len(file_market_market_proto_rawDesc)))
+func file_market_v1_market_proto_rawDescGZIP() []byte {
+	file_market_v1_market_proto_rawDescOnce.Do(func() {
+		file_market_v1_market_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_market_v1_market_proto_rawDesc), len(file_market_v1_market_proto_rawDesc)))
 	})
-	return file_market_market_proto_rawDescData
+	return file_market_v1_market_proto_rawDescData
 }
 
-var file_market_market_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_market_market_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_market_market_proto_goTypes = []any{
-	(UserRole)(0),                 // 0: market.UserRole
-	(*Market)(nil),                // 1: market.Market
+var file_market_v1_market_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_market_v1_market_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_market_v1_market_proto_goTypes = []any{
+	(UserRole)(0),                 // 0: market.v1.UserRole
+	(*Market)(nil),                // 1: market.v1.Market
 	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
 }
-var file_market_market_proto_depIdxs = []int32{
-	0, // 0: market.Market.allowed_roles:type_name -> market.UserRole
-	2, // 1: market.Market.deleted_at:type_name -> google.protobuf.Timestamp
+var file_market_v1_market_proto_depIdxs = []int32{
+	0, // 0: market.v1.Market.allowed_roles:type_name -> market.v1.UserRole
+	2, // 1: market.v1.Market.deleted_at:type_name -> google.protobuf.Timestamp
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -197,27 +197,27 @@ var file_market_market_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_market_market_proto_init() }
-func file_market_market_proto_init() {
-	if File_market_market_proto != nil {
+func init() { file_market_v1_market_proto_init() }
+func file_market_v1_market_proto_init() {
+	if File_market_v1_market_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_market_market_proto_rawDesc), len(file_market_market_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_market_v1_market_proto_rawDesc), len(file_market_v1_market_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_market_market_proto_goTypes,
-		DependencyIndexes: file_market_market_proto_depIdxs,
-		EnumInfos:         file_market_market_proto_enumTypes,
-		MessageInfos:      file_market_market_proto_msgTypes,
+		GoTypes:           file_market_v1_market_proto_goTypes,
+		DependencyIndexes: file_market_v1_market_proto_depIdxs,
+		EnumInfos:         file_market_v1_market_proto_enumTypes,
+		MessageInfos:      file_market_v1_market_proto_msgTypes,
 	}.Build()
-	File_market_market_proto = out.File
-	file_market_market_proto_goTypes = nil
-	file_market_market_proto_depIdxs = nil
+	File_market_v1_market_proto = out.File
+	file_market_v1_market_proto_goTypes = nil
+	file_market_v1_market_proto_depIdxs = nil
 }
