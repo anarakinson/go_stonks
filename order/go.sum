@@ -1,7 +1,13 @@
+github.com/anarakinson/go_stonks v1.0.16 h1:qxXKDYFADYtL7OaOOgCkVDQa7yGJRcAGhN4hyl+232s=
+github.com/anarakinson/go_stonks v1.0.16/go.mod h1:gVgaEIDKUdsbHpbinK5W/8RddO1CIrV/ZnnbmMDEAUQ=
+github.com/anarakinson/go_stonks v1.1.0 h1:DWN9NwkIe3X/Hj7wE3HYuQvk26lkRb44QKVobFFFBe4=
+github.com/anarakinson/go_stonks v1.1.0/go.mod h1:gVgaEIDKUdsbHpbinK5W/8RddO1CIrV/ZnnbmMDEAUQ=
 github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250804145520-12dca1623e30 h1:GeZR3IJ89sffV1IwbScFePaoTdERXSpZ6rATZUQwbw0=
 github.com/anarakinson/go_stonks/stonks_pb v0.0.0-20250804145520-12dca1623e30/go.mod h1:bXDlEjJtaX601tuitDCmxeMA5c/RDbxL0IqxYO+RVrA=
 github.com/anarakinson/go_stonks_shared v0.0.5 h1:DflifZUcrtZE0UCmj3EN+Pqcc9z7Cxvk05LSZgSvvDc=
 github.com/anarakinson/go_stonks_shared v0.0.5/go.mod h1:vNlIgC6aYZ7UmV8yYn/4v76oPRwfjp9I12bOLVQWoZY=
+github.com/anarakinson/go_stonks_shared v0.0.6 h1:mcpQlZgkC1jR7wvQmbZimkqd727q/PylPG+IyyQpkcw=
+github.com/anarakinson/go_stonks_shared v0.0.6/go.mod h1:vNlIgC6aYZ7UmV8yYn/4v76oPRwfjp9I12bOLVQWoZY=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/bsm/ginkgo/v2 v2.12.0 h1:Ny8MWAHyOepLGlLKYmXG4IEkioBysk6GpaRTLC8zwWs=

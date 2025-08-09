@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
-	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order/v1"
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 )

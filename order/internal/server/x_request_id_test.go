@@ -7,8 +7,8 @@ import (
 
 	order_service "github.com/anarakinson/go_stonks/order/internal/app/order"
 	"github.com/anarakinson/go_stonks/order/internal/mocks"
-	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
-	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
+	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market/v1"
+	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order/v1"
 	"github.com/anarakinson/go_stonks_shared/pkg/interceptors"
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"github.com/stretchr/testify/assert"

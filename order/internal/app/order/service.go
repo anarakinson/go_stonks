@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/anarakinson/go_stonks/order/internal/domain"
-	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
-	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
-	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
+	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market/v1"
+	order_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order/v1"
+	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument/v1"
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 

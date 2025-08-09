@@ -3,8 +3,8 @@ package mocks
 import (
 	"context"
 
-	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
-	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
+	market_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/market/v1"
+	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument/v1"
 	"google.golang.org/grpc"
 )
 

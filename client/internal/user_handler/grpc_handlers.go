@@ -8,8 +8,8 @@ import (
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 
-	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
-	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
+	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market/v1"
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order/v1"
 )
 
 func (h *UserHandler) CreateOrderRequest(ctx context.Context, order *domain.Order, timeout time.Duration) (*pb.CreateOrderResponse, error) {

@@ -18,7 +18,7 @@ import (
 
 	"github.com/joho/godotenv"
 
-	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order/v1"
 )
 
 func main() {
@@ -69,8 +69,8 @@ func main() {
 		target_address,
 		nil, // TLS настройки
 		// интерсепторы
-		interceptors.XRequestIDClient(), // x-request-id interceptor
-		interceptors.RetryInterceptor(3) // retry-интерсептор на три попытки
+		interceptors.XRequestIDClient(),  // x-request-id interceptor
+		interceptors.RetryInterceptor(3), // retry-интерсептор на три попытки
 	)
 	if err != nil {
 		logger.Log.Error("Connection failed", zap.Error(err))

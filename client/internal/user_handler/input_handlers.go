@@ -8,7 +8,7 @@ import (
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/domain"
 
-	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market"
+	pb_market "github.com/anarakinson/go_stonks/stonks_pb/gen/market/v1"
 )
 
 func (h *UserHandler) GetUserID(maxUserIdLen int) (string, error) {

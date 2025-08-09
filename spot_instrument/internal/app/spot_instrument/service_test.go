@@ -10,7 +10,7 @@ import (
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/app/spot_instrument"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/domain"
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/mocks"
-	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
+	spot_inst_pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument/v1"
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"github.com/stretchr/testify/assert"
 )

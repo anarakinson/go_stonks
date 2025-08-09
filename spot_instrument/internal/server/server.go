@@ -11,7 +11,7 @@ import (
 	"github.com/anarakinson/go_stonks_shared/pkg/logger"
 	"go.uber.org/zap"
 
-	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument"
+	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/spot_instrument/v1"
 
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
