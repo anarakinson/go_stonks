@@ -11,6 +11,8 @@ import (
 
 	"github.com/anarakinson/go_stonks/stonks_client/internal/user_handler"
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
+	"github.com/anarakinson/go_stonks_shared/pkg/logger"
+	"go.uber.org/zap"
 )
 
 type Client struct {
@@ -23,7 +25,7 @@ func NewClient(client pb.OrderServiceClient) *Client {
 	}
 }
 
-func (c *Client) HandleUserInput() error {
+func (c *Client) HandleUserInput(ctx context.Context) error {
 	// ----------------------------------------- //
 	// начинаем взаимодействие с сервисом
 	// создаем хендлер пользовательского ввода на основе клиента
@@ -70,8 +72,14 @@ func (c *Client) HandleUserInput() error {
 	// переходим в бесконечный цикл. получаем данные - отправляем запрос на сервис
 	for {
 
+		// Проверяем отмену контекста в начале каждой итерации
+		if err := ctx.Err(); err != nil {
+			logger.Log.Error("Context interruption", zap.Error(err))
+			return fmt.Errorf("context interruption: %w", err)
+		}
+
 		// получаем маркеты от внешнего сервиса
-		markets, err := uHandler.GetMarkets(userRole, time.Duration(timeout)*time.Second)
+		markets, err := uHandler.GetMarkets(ctx, userRole, time.Duration(timeout)*time.Second)
 		if err != nil {
 			fmt.Println("Error get available markets.")
 			return err
@@ -84,14 +92,15 @@ func (c *Client) HandleUserInput() error {
 				fmt.Println("End")
 				return fmt.Errorf("user interruption")
 			}
-			log.Fatalf("Stdin error: %v", err)
+			logger.Log.Error("Stdin error", zap.Error(err))
+			return err
 		}
 
 		// -------------------------------------- //
 		// отправляем запрос к сервису
 
 		// создаем заказ на основе введенных данных
-		resp, err := uHandler.CreateOrderRequest(order, time.Duration(timeout)*time.Second)
+		resp, err := uHandler.CreateOrderRequest(ctx, order, time.Duration(timeout)*time.Second)
 		if err != nil {
 			fmt.Println("Error creating order. Try again")
 			continue
@@ -109,7 +118,7 @@ func (c *Client) HandleUserInput() error {
 			OrderId: resp.OrderId, // указываем ордер из ответа
 		})
 		if err != nil {
-			log.Fatalf("StreamOrderUpdates failed: %v", err)
+			logger.Log.Error("StreamOrderUpdates failed", zap.Error(err))
 		}
 
 		// ждем, когда заказ обработается
@@ -130,7 +139,7 @@ func (c *Client) HandleUserInput() error {
 		// -------------------------------------- //
 		// получаем список заказов пользователя
 		fmt.Println("\n***\n")
-		respOrders, err := uHandler.GetUserOrders(order.UserID, time.Duration(timeout)*time.Second)
+		respOrders, err := uHandler.GetUserOrders(ctx, order.UserID, time.Duration(timeout)*time.Second)
 		if err != nil {
 			fmt.Println("Error getting user orders")
 			continue

@@ -12,12 +12,19 @@ import (
 	pb "github.com/anarakinson/go_stonks/stonks_pb/gen/order"
 )
 
-func (h *UserHandler) CreateOrderRequest(order *domain.Order, timeout time.Duration) (*pb.CreateOrderResponse, error) {
+func (h *UserHandler) CreateOrderRequest(ctx context.Context, order *domain.Order, timeout time.Duration) (*pb.CreateOrderResponse, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	// добавить проверку отмены или ошибки контекста
+	// Проверка, не отменён ли уже исходный контекст
+	if err := ctx.Err(); err != nil {
+		logger.Log.Error(
+			"Context cancelled before request",
+			zap.Error(err),
+		)
+		return nil, err
+	}
 
 	logger.Log.Info("Create order")
 	resp, err := h.client.CreateOrder(ctx, &pb.CreateOrderRequest{
@@ -39,10 +46,19 @@ func (h *UserHandler) CreateOrderRequest(order *domain.Order, timeout time.Durat
 
 }
 
-func (h *UserHandler) GetUserOrders(userId string, timeout time.Duration) (*pb.GetUserOrdersResponse, error) {
+func (h *UserHandler) GetUserOrders(ctx context.Context, userId string, timeout time.Duration) (*pb.GetUserOrdersResponse, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
+
+    // Проверка, не отменён ли уже исходный контекст
+    if err := ctx.Err(); err != nil {
+        logger.Log.Error(
+            "Context cancelled before request",
+            zap.Error(err),
+        )
+        return nil, err
+    }
 
 	logger.Log.Info("Get user orders")
 	resp, err := h.client.GetUserOrders(ctx, &pb.GetUserOrdersRequest{UserId: userId})
@@ -59,10 +75,19 @@ func (h *UserHandler) GetUserOrders(userId string, timeout time.Duration) (*pb.G
 
 }
 
-func (h *UserHandler) GetMarkets(userRole pb_market.UserRole, timeout time.Duration) ([]*pb_market.Market, error) {
+func (h *UserHandler) GetMarkets(ctx context.Context, userRole pb_market.UserRole, timeout time.Duration) ([]*pb_market.Market, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
+
+	// Проверка, не отменён ли уже исходный контекст
+    if err := ctx.Err(); err != nil {
+        logger.Log.Error(
+            "Context cancelled before request",
+            zap.Error(err),
+        )
+        return nil, err
+    }
 
 	logger.Log.Info("Get available markets")
 	markets, err := h.client.GetMarkets(ctx, &pb.GetMarketsRequest{UserRoles: userRole})

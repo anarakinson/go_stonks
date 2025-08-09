@@ -26,6 +26,7 @@ type Server struct {
 	port        string
 	repo        order_service.Repository
 	redisClient *redis.Client
+	gs          *grpc.Server
 }
 
 func NewServer(port string, repo order_service.Repository, redis *redis.Client) *Server {
@@ -54,7 +55,9 @@ func (s *Server) Run() error {
 	}
 
 	// создаем сервер GRPC
-	gs := grpc.NewServer(
+	s.gs = grpc.NewServer(
+		// ограничение количества одновременных запросов
+		grpc.MaxConcurrentStreams(50),
 		// OpenTelemetry трассировщик
 		grpc.StatsHandler(otelgrpc.NewServerHandler()),
 		// добавляем интерцепторы
@@ -83,6 +86,7 @@ func (s *Server) Run() error {
 			spot_inst_pb.SpotInstrumentService_ViewMarkets_FullMethodName,
 			5*time.Minute,
 		),
+		interceptors.RetryInterceptor(3) // retry-интерсептор на три попытки
 		// interceptors.TimeoutAdjusterClientInterceptor(0.8), // интерсептор для уменьшения времени таймаута контекта
 	)
 	if err != nil {
@@ -96,13 +100,16 @@ func (s *Server) Run() error {
 	// создаем сервис
 	orderService := order_service.NewService(spotClient, s.repo)
 	// регистрируем
-	order_pb.RegisterOrderServiceServer(gs, orderService)
+	order_pb.RegisterOrderServiceServer(s.gs, orderService)
 
 	logger.Log.Info(
 		"Order service started",
 		zap.String("listening address", fmt.Sprintf("%v", lis.Addr())),
 	)
 
-	return gs.Serve(lis)
+	return s.gs.Serve(lis)
+}
 
+func (s *Server) Shutdown() {
+	s.gs.GracefulStop()
 }

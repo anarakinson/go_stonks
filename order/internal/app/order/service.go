@@ -68,6 +68,13 @@ func (s *Service) GetMarkets(ctx context.Context, req *order_pb.GetMarketsReques
 // GetOrderStatus - возвращает статус заказа
 func (s *Service) GetOrderStatus(ctx context.Context, req *order_pb.GetOrderStatusRequest) (*order_pb.GetOrderStatusResponse, error) {
 
+	if req.OrderId == "" {
+		return nil, status.Errorf(
+			codes.InvalidArgument,
+			"missing order ID",
+		)
+	}
+
 	// получаем данные из хранилища
 	s.mu.RLock()
 	defer s.mu.RUnlock()
@@ -136,6 +143,13 @@ func (s *Service) CreateOrder(ctx context.Context, req *order_pb.CreateOrderRequ
 // GetOrderStatus - возвращает статус заказа
 func (s *Service) GetUserOrders(ctx context.Context, req *order_pb.GetUserOrdersRequest) (*order_pb.GetUserOrdersResponse, error) {
 
+	if req.UserId == "" {
+		return nil, status.Errorf(
+			codes.InvalidArgument,
+			"missing user ID",
+		)
+	}
+
 	// получаем данные из хранилища
 	orders, err := s.orders.GetUserOrders(req.UserId)
 	// проверяем
@@ -157,6 +171,12 @@ func (s *Service) GetUserOrders(ctx context.Context, req *order_pb.GetUserOrders
 // стрим состояния заказа
 func (s *Service) StreamOrderUpdates(req *order_pb.GetOrderStatusRequest, stream order_pb.OrderService_StreamOrderUpdatesServer) error {
 	orderID := req.GetOrderId()
+	if orderID == "" {
+		return status.Errorf(
+			codes.InvalidArgument,
+			"missing order ID",
+		)
+	}
 
 	s.mu.Lock()
 	updatesCh, exists := s.updatesChannels[orderID]

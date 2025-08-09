@@ -22,6 +22,7 @@ type Server struct {
 	port        string
 	repo        spot_instrument_service.Repository
 	redisClient *redis.Client
+	gs          *grpc.Server
 }
 
 func NewServer(port string, repo spot_instrument_service.Repository, redisClient *redis.Client) *Server {
@@ -42,7 +43,9 @@ func (s *Server) Run() error {
 	}
 
 	// создаем сервер GRPC
-	gs := grpc.NewServer(
+	s.gs = grpc.NewServer(
+		// ограничение количества одновременных запросов
+		grpc.MaxConcurrentStreams(50),
 		// OpenTelemetry трассировщик
 		grpc.StatsHandler(otelgrpc.NewServerHandler()),
 		// добавляем интерцепторы
@@ -59,12 +62,16 @@ func (s *Server) Run() error {
 	spotService := spot_instrument_service.NewService(s.repo)
 
 	// регистрируем сервис на сервере
-	pb.RegisterSpotInstrumentServiceServer(gs, spotService)
+	pb.RegisterSpotInstrumentServiceServer(s.gs, spotService)
 
 	logger.Log.Info(
 		"Spot instrument service started",
 		zap.String("listening address", fmt.Sprintf("%v", lis.Addr())),
 	)
 
-	return gs.Serve(lis)
+	return s.gs.Serve(lis)
+}
+
+func (s *Server) Shutdown() {
+	s.gs.GracefulStop()
 }

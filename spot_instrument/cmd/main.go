@@ -6,7 +6,9 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 	"time"
 
 	"github.com/anarakinson/go_stonks/spot_instrument/internal/app/spot_instrument"
@@ -23,6 +25,11 @@ import (
 )
 
 func main() {
+
+	//--------------------------------------------//
+	// Канал для graceful shutdown
+	shutdown := make(chan os.Signal, 1)
+	signal.Notify(shutdown, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	//--------------------------------------------//
 	// загружаем переменные окружения
@@ -130,13 +137,27 @@ func main() {
 	serv := server.NewServer(os.Getenv("PORT"), repo, redisClient)
 	// запускаем пинг редис сервиса каждые 15 секунд
 	go serv.StartRedisMonitor(ctx, 15*time.Second)
-	// запускаем сервер
-	err = serv.Run()
-	if err != nil {
-		logger.Log.Error(
-			"Failed on serve",
-			zap.Error(err),
-		)
-		return
+	// запускаем сервер c грейсфул шатдаун
+	errChan := make(chan error, 1)
+	go func() {
+		err = serv.Run()
+		if err != nil {
+			logger.Log.Error(
+				"Failed on serve",
+				zap.Error(err),
+			)
+			errChan <- err
+			return
+		}
+	}()
+
+	// грейсфул шатдаун
+	// Ждем либо сигнал завершения, либо ошибку сервера
+	select {
+	case err := <-errChan:
+		logger.Log.Error("Server error", zap.Error(err))
+	case <-shutdown:
+		logger.Log.Info("Server is shutting down...")
+		serv.Shutdown()
 	}
 }
